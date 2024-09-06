@@ -95,7 +95,7 @@ const TableCompanyInfo = async () => {
                         </div>
 
                         <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-meta-3">${company.Shareholders}</p>
+                            <p className="text-meta-3">{company.Shareholders}</p>
                         </div>
 
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
@@ -110,7 +110,7 @@ const TableCompanyInfo = async () => {
                         </div>
 
                         <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-meta-3">${company.Subsidiary}</p>
+                            <p className="text-meta-3">{company.Subsidiary}</p>
                         </div>
 
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">

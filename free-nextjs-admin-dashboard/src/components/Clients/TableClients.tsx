@@ -97,7 +97,7 @@ const TableClients = async () => {
                         </div>
 
                         <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-meta-3">${client.CI}</p>
+                            <p className="text-meta-3">{client.CI}</p>
                         </div>
 
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
@@ -111,16 +111,16 @@ const TableClients = async () => {
                             <p className="text-meta-5">{client.CompanyRole}</p>
                         </div>
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{client.Address}%</p>
+                            <p className="text-meta-5">{client.Address}</p>
                         </div>
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{client.Email}%</p>
+                            <p className="text-meta-5">{client.Email}</p>
                         </div>
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{client.Phone}%</p>
+                            <p className="text-meta-5">{client.Phone}</p>
                         </div>
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{client.Interests}%</p>
+                            <p className="text-meta-5">{client.Interests}</p>
                         </div>
                     </div>
                 ))}
