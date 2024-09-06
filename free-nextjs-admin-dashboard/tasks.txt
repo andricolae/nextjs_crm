@@ -1,7 +1,14 @@
 ************************************************************************
-1. 
-2. 
-3. 
-4. 
-5. 
+0. db updates
+1. login
+2. user/admin permissions
+3. admin
+    3.1 add/update/delete clients & services
+    3.2 update/add message/email template & body
+4. users
+    4.1 send message/email --> ***
+        4.1.2 
+5. filter & search
+6. emailing services
+7. messaging services
 ************************************************************************
