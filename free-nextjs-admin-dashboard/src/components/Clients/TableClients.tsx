@@ -1,50 +1,3 @@
-import { BRAND } from "@/types/brand";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-
-const brandData: BRAND[] = [
-    {
-        logo: "/images/brand/brand-01.svg",
-        name: "Google",
-        visitors: 3.5,
-        revenues: "5,768",
-        sales: 590,
-        conversion: 4.8,
-    },
-    {
-        logo: "/images/brand/brand-02.svg",
-        name: "Twitter",
-        visitors: 2.2,
-        revenues: "4,635",
-        sales: 467,
-        conversion: 4.3,
-    },
-    {
-        logo: "/images/brand/brand-03.svg",
-        name: "Github",
-        visitors: 2.1,
-        revenues: "4,290",
-        sales: 420,
-        conversion: 3.7,
-    },
-    {
-        logo: "/images/brand/brand-04.svg",
-        name: "Vimeo",
-        visitors: 1.5,
-        revenues: "3,580",
-        sales: 389,
-        conversion: 2.5,
-    },
-    {
-        logo: "/images/brand/brand-05.svg",
-        name: "Facebook",
-        visitors: 3.5,
-        revenues: "6,768",
-        sales: 390,
-        conversion: 4.2,
-    },
-];
-
 type client = {
     ClientId: any,
     FirstName: any,
@@ -60,27 +13,10 @@ type client = {
 }
 
 const TableClients = async () => {
-    // const [clients, setClients] = useState<client[]>([]);
-
-    // useEffect(() => {
-    //     const fetchClients = async () => {
-    //         const response = await fetch('/api/client');
-    //         const data = await response.json();
-    //         setClients(data);
-    //     };
-
-    //     fetchClients();
-    // }, []);
-    ///////////////////////////////////////////////////////////////////
-
     const res = await fetch('http://localhost:3000/api/client', {
         cache: 'no-store'
     });
     const clients: client[] = await res.json();
-    // console.log(clients);
-
-    // console.log(error);
-    
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -151,9 +87,6 @@ const TableClients = async () => {
                         key={key}
                     >
                         <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                            <div className="flex-shrink-0">
-                                {/* <Image src={brand.logo} alt="Brand" width={48} height={48} /> */}
-                            </div>
                             <p className="hidden text-black dark:text-white sm:block">
                                 {client.FirstName}
                             </p>
@@ -164,7 +97,7 @@ const TableClients = async () => {
                         </div>
 
                         <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-meta-3">${client.CI}</p>
+                            <p className="text-meta-3">{client.CI}</p>
                         </div>
 
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
@@ -178,16 +111,16 @@ const TableClients = async () => {
                             <p className="text-meta-5">{client.CompanyRole}</p>
                         </div>
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{client.Address}%</p>
+                            <p className="text-meta-5">{client.Address}</p>
                         </div>
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{client.Email}%</p>
+                            <p className="text-meta-5">{client.Email}</p>
                         </div>
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{client.Phone}%</p>
+                            <p className="text-meta-5">{client.Phone}</p>
                         </div>
                         <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{client.Interests}%</p>
+                            <p className="text-meta-5">{client.Interests}</p>
                         </div>
                     </div>
                 ))}
