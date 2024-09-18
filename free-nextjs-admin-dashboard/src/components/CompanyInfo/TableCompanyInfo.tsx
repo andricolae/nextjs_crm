@@ -1,3 +1,5 @@
+import ModalCompany from "../common/ModalCompany";
+
 type company = {
     CompanyId: any,
     CompanyName: any,
@@ -13,7 +15,7 @@ type company = {
 }
 
 const TableCompanyInfo = async () => {
-    const res = await fetch('http://localhost:3000/api/companyInfo', {
+    const res = await fetch('http://localhost:3000/api/readCompanyInfo', {
         cache: 'no-store'
     });
     const companies: company[] = await res.json();
@@ -79,51 +81,56 @@ const TableCompanyInfo = async () => {
                 </div>
 
                 {companies.map((company, key) => (
-                    <div className={`grid grid-cols-3 sm:grid-cols-10 ${key === companies.length - 1
+                    <div key={key}>
+                        <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-10 ${key === companies.length - 1
                             ? ""
                             : "border-b border-stroke dark:border-strokedark"
-                            }`}key={key}>
+                            }`} key={key}>
 
-                        <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                            <p className="hidden text-black dark:text-white sm:block">
-                                {company.CompanyName}
-                            </p>
-                        </div>
+                            <div className="flex items-center gap-3 p-2.5 xl:p-5">
+                                <p className="hidden text-black dark:text-white sm:block">
+                                    {company.CompanyName}
+                                </p>
+                            </div>
 
-                        <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-black dark:text-white">{company.TVA}</p>
-                        </div>
+                            <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                <p className="text-black dark:text-white">{company.TVA}</p>
+                            </div>
 
-                        <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-meta-3">{company.Shareholders}</p>
-                        </div>
+                            <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                <p className="text-meta-3">{company.Shareholders}</p>
+                            </div>
 
-                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-black dark:text-white">{company.CIF}</p>
-                        </div>
+                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                <p className="text-black dark:text-white">{company.CIF}</p>
+                            </div>
 
-                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{company.COM}</p>
-                        </div>
-                        <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-black dark:text-white">{company.Headquarter}</p>
-                        </div>
+                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                <p className="text-meta-5">{company.COM}</p>
+                            </div>
+                            <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                <p className="text-black dark:text-white">{company.Headquarter}</p>
+                            </div>
 
-                        <div className="flex items-center justify-center p-2.5 xl:p-5">
-                            <p className="text-meta-3">{company.Subsidiary}</p>
-                        </div>
+                            <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                <p className="text-meta-3">{company.Subsidiary}</p>
+                            </div>
 
-                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-black dark:text-white">{company.MainActivity}</p>
-                        </div>
+                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                <p className="text-black dark:text-white">{company.MainActivity}</p>
+                            </div>
 
-                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{company.SecondaryActivity}</p>
-                        </div>
+                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                <p className="text-meta-5">{company.SecondaryActivity}</p>
+                            </div>
 
-                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                            <p className="text-meta-5">{company.Interests}</p>
-                        </div>
+                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                <p className="text-meta-5">{company.Interests}</p>
+                            </div>
+                        </label>
+                        <ModalCompany id={`my_modal_${key}`} companyName={company.CompanyName} TVA={company.TVA} shareholders={company.Shareholders} 
+                        CIF={company.CIF} COM={company.COM} headquarter={company.Headquarter} subsidiary={company.Subsidiary} 
+                        mainActivity={company.MainActivity} secondaryActivity={company.SecondaryActivity} interests={company.Interests}/>
                     </div>
                 ))}
             </div>
