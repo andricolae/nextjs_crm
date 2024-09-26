@@ -15,7 +15,7 @@ type client = {
 }
 
 const TableClients = async () => {
-    const res = await fetch('https://andricolae.github.io/nextjs_crm/api/readClient', {
+    const res = await fetch('http://andricolae.github.io/nextjs_crm/api/readClient', {
         cache: 'no-store'
     });
     const clients: client[] = await res.json();
