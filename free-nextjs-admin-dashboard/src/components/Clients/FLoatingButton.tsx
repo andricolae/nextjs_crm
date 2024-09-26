@@ -8,8 +8,8 @@ const FloatingButton = () => {
             <label htmlFor="modalClientFloatingButton" className="floating-button">
                 +
             </label>
-            <ModalClients modalId="modalClientFloatingButton" firstName={"sfvgrf"} lastName={"sfvgrf"} CI={"sfvgrf"} CNP={"sfvgrf"} companyId={"sfvgrf"}
-                companyRole={"sfvgrf"} address={"sfvgrf"} email={"sfvgrf"} phone={"sfvgrf"} interests={"sfvgrf"} />
+            <ModalClients modalId="modalClientFloatingButton" firstName={""} lastName={""} CI={""} CNP={""} companyId={""}
+                companyRole={""} address={""} email={""} phone={""} interests={""} secondButton={true} />
         </>
     );
 };

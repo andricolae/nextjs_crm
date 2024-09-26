@@ -4,10 +4,10 @@ import pool from '../../../lib/db';
 export default async function handlerUpdateClient(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'PUT') {
         try {
-            const { clientId } = req.query;
+            const { ClientId } = req.query;
             const { FirstName, LastName, CI, CNP, CompanyId, CompanyRole, Address, Email, Phone, Interests } = req.body;
 
-            if (typeof clientId !== 'string') {
+            if (typeof ClientId !== 'string') {
                 return res.status(400).json({ message: 'Invalid ID' });
             }
 
@@ -17,7 +17,7 @@ export default async function handlerUpdateClient(req: NextApiRequest, res: Next
 
             const [result]: any = await pool.query(
                 'UPDATE Client SET FirstName = ?, LastName = ?, CI = ?, CNP = ?, CompanyId = ?, CompanyRole = ?, Address = ?, Email = ?, Phone = ?, Interests = ? WHERE ClientId = ?',
-                [FirstName, LastName, CI, CNP, CompanyId, CompanyRole, Address, Email, Phone, Interests, clientId]
+                [FirstName, LastName, CI, CNP, CompanyId, CompanyRole, Address, Email, Phone, Interests, ClientId]
             );
 
             if (result.affectedRows === 0) {
