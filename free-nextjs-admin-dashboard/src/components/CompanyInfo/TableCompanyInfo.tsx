@@ -128,9 +128,9 @@ const TableCompanyInfo = async () => {
                                 <p className="text-meta-5">{company.Interests}</p>
                             </div>
                         </label>
-                        <ModalCompany id={`my_modal_${key}`} companyName={company.CompanyName} TVA={company.TVA} shareholders={company.Shareholders} 
+                        <ModalCompany companyId={company.CompanyId} modalId={`my_modal_${key}`} companyName={company.CompanyName} TVA={company.TVA} shareholders={company.Shareholders} 
                         CIF={company.CIF} COM={company.COM} headquarter={company.Headquarter} subsidiary={company.Subsidiary} 
-                        mainActivity={company.MainActivity} secondaryActivity={company.SecondaryActivity} interests={company.Interests}/>
+                        mainActivity={company.MainActivity} secondaryActivity={company.SecondaryActivity} interests={company.Interests} secondButton={false} />
                     </div>
                 ))}
             </div>

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import pool from '../../lib/db';
+import pool from '../../../lib/db';
 
 export default async function handlerUpdateCompanyInfo(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'PUT') {
@@ -15,8 +15,8 @@ export default async function handlerUpdateCompanyInfo(req: NextApiRequest, res:
                 return res.status(400).json({ message: 'Missing required fields' });
             }
 
-            const result = await pool.query(
-                'UPDATE CompanyInfo SET name = ?, email = ?, phone = ? WHERE CompanyId = ?',
+            const [result]: any = await pool.query(
+                'UPDATE CompanyInfo SET CompanyName = ?, TVA = ?, Shareholders = ?, CIF = ?, COM = ?, Headquarter = ?, Subsidiary = ?, MainActivity = ?, SecondaryActivity = ?, Interests = ? WHERE CompanyId = ?',
                 [CompanyName, TVA, Shareholders, CIF, COM, Headquarter, Subsidiary, MainActivity, SecondaryActivity, Interests, CompanyId]
             );
 

@@ -15,14 +15,10 @@ type client = {
 }
 
 const TableClients = async () => {
-    // try {
     const res = await fetch('http://localhost:3000/api/readClient', {
         cache: 'no-store'
     });
     const clients: client[] = await res.json();
-    // } catch (error) {
-    //     console.log(error);
-    // }
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -128,7 +124,7 @@ const TableClients = async () => {
                             </div>
                         </label>
                         <ModalClients clientId={client.ClientId} modalId={`my_modal_${key}`} firstName={client.FirstName} lastName={client.LastName} CI={client.CI} CNP={client.CNP} companyId={client.CompanyId} 
-                        companyRole={client.CompanyRole} address={client.Address} email={client.Email} phone={client.Phone} interests={client.Interests}/>
+                        companyRole={client.CompanyRole} address={client.Address} email={client.Email} phone={client.Phone} interests={client.Interests} secondButton={false} />
                     </div>
                 ))}
 

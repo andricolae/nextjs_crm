@@ -13,20 +13,16 @@ const ModalClients = (props: any) => {
     const [phone, setPhone] = useState<string | undefined>(props.phone);
     const [interests, setInterests] = useState<string | undefined>(props.interests);
 
-    const save = async () => {
-        // setLoading(true);
-        // setMessage('');
-
+    const saveClientChanges = async () => {
         try {
-            console.log(props.clientId);
-            const response = await fetch(`http://localhost:3000/api/updateClients/${props.clientId}`, {
+            await fetch(`http://localhost:3000/api/updateClients/${props.clientId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     FirstName: firstName,
-                    LastName: lastName, 
+                    LastName: lastName,
                     CI: CI,
                     CNP: CNP,
                     CompanyId: companyId,
@@ -37,32 +33,59 @@ const ModalClients = (props: any) => {
                     Interests: interests,
                 }),
             });
-            
-            console.log(response);
-            // if (response.ok) {
-            //     setMessage('Client updated successfully!');
-            // } else {
-            //     const errorData = await response.json();
-            //     setMessage(`Error: ${errorData.message}`);
-            // }
         } catch (error) {
             console.error(error);
-            // setMessage('Something went wrong, please try again.');
-        } finally {
-            // setLoading(false);
         }
+        window.location.reload();
     }
 
-    const deleteCompany = async () => {
+    const addClient = async () => {
+        try {
+            await fetch(`http://localhost:3000/api/insertClient`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    FirstName: firstName,
+                    LastName: lastName,
+                    CI: CI,
+                    CNP: CNP,
+                    CompanyId: companyId,
+                    CompanyRole: companyRole,
+                    Address: address,
+                    Email: email,
+                    Phone: phone,
+                    Interests: interests,
+                }),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+        window.location.reload();
+    }
 
+    const deleteClient = async () => {
+        try {
+            await fetch(`http://localhost:3000/api/deleteClient/${props.clientId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+        window.location.reload();
     }
 
     return (
         <>
             <input type="checkbox" id={props.modalId} className="modal-toggle" />
             <div className="modal" role="dialog">
-                <div className="modal-box w-full max-w-7xl">
-                    <div className="grid grid-cols-3 sm:grid-cols-10">
+                <div className="modal-box w-[70%] max-w-3xl">
+                    <div className="grid grid-cols-1 sm:grid-rows-10">
+                        <label htmlFor={props.modalId} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">X</label>
                         <input placeholder="First Name" value={firstName} className="flex items-center gap-3 p-2.5 xl:p-5 text-black" onChange={(e) => setFirstName(e.target.value)} />
                         <input placeholder="Last Name" value={lastName} className="flex items-center justify-center p-2.5 xl:p-5 text-black" onChange={(e) => setLastName(e.target.value)} />
                         <input placeholder="CI" value={CI} className="flex items-center justify-center p-2.5 xl:p-5 text-meta-3" onChange={(e) => setCI(e.target.value)} />
@@ -75,8 +98,8 @@ const ModalClients = (props: any) => {
                         <input placeholder="Interests" value={interests} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setInterests(e.target.value)} />
                     </div>
                     <div className="modal-action">
-                        <label htmlFor={props.modalId} className="btn btn-info" onClick={save}>Save</label>
-                        <label htmlFor={props.modalId} className="btn btn-outline btn-error" onClick={deleteCompany}>Delete</label>
+                        <label htmlFor={props.modalId} className="btn btn-info" onClick={props.secondButton === false ? saveClientChanges : addClient}>Save</label>
+                        <button className="btn btn-outline btn-error" onClick={deleteClient} disabled={props.secondButton} style={{ display: props.secondButton ? "none" : "inline-block" }}>Delete</button>
                     </div>
                 </div>
             </div>
