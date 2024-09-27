@@ -1,9 +1,7 @@
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
 export const metadata: Metadata = {
     title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
@@ -12,7 +10,6 @@ export const metadata: Metadata = {
 
 const SignIn: React.FC = () => {
     return (
-        // <DefaultLayout>
         <div className="m-9">
             <Breadcrumb pageName="Sign In" />
 
@@ -20,7 +17,7 @@ const SignIn: React.FC = () => {
                 <div className="flex flex-wrap items-center">
                     <div className="hidden w-full xl:block xl:w-1/2">
                         <div className="px-26 py-17.5 text-center">
-                            <Link className="mb-5.5 inline-block" href="/">
+                            <div className="mb-5.5 inline-block" >
                                 <Image
                                     className="hidden dark:block"
                                     src={"/images/logo/logo.svg"}
@@ -35,7 +32,7 @@ const SignIn: React.FC = () => {
                                     width={176}
                                     height={32}
                                 />
-                            </Link>
+                            </div>
 
                             <p className="2xl:px-20">
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit
@@ -249,7 +246,7 @@ const SignIn: React.FC = () => {
                                     />
                                 </div>
 
-                                <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
+                                {/* <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                                     <span>
                                         <svg
                                             width="20"
@@ -284,23 +281,14 @@ const SignIn: React.FC = () => {
                                         </svg>
                                     </span>
                                     Sign in with Google
-                                </button>
+                                </button> */}
 
-                                <div className="mt-6 text-center">
-                                    <p>
-                                        Don’t have any account?{" "}
-                                        <Link href="/auth/signup" className="text-primary">
-                                            Sign Up
-                                        </Link>
-                                    </p>
-                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        // </DefaultLayout>
     );
 };
 

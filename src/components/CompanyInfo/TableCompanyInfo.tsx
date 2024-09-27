@@ -1,4 +1,7 @@
+'use client'
+import { useEffect, useState } from "react";
 import ModalCompany from "../common/ModalCompany";
+import Loader from "../common/Loader";
 
 type company = {
     CompanyId: any,
@@ -14,11 +17,26 @@ type company = {
     Interests: any,
 }
 
-const TableCompanyInfo = async () => {
-    const res = await fetch('http://localhost:3000/api/readCompanyInfo', {
-        cache: 'no-store'
-    });
-    const companies: company[] = await res.json();
+const TableCompanyInfo = () => {
+    const [companies, setCompanies] = useState<company[]>([]);
+
+    const getCompanies = async () => {
+        try {
+            await fetch(`/api/readCompanyInfo`, {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setCompanies(data);
+                })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getCompanies();
+    }, []);
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -79,60 +97,65 @@ const TableCompanyInfo = async () => {
                         </h5>
                     </div>
                 </div>
+                {companies?.length > 0 ? (
+                    <div>
+                        {companies.map((company, key) => (
+                            <div key={key}>
+                                <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-10 ${key === companies.length - 1
+                                    ? ""
+                                    : "border-b border-stroke dark:border-strokedark"
+                                    }`} key={key}>
 
-                {companies.map((company, key) => (
-                    <div key={key}>
-                        <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-10 ${key === companies.length - 1
-                            ? ""
-                            : "border-b border-stroke dark:border-strokedark"
-                            }`} key={key}>
+                                    <div className="flex items-center gap-3 p-2.5 xl:p-5">
+                                        <p className="hidden text-black dark:text-white sm:block">
+                                            {company.CompanyName}
+                                        </p>
+                                    </div>
 
-                            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                                <p className="hidden text-black dark:text-white sm:block">
-                                    {company.CompanyName}
-                                </p>
-                            </div>
+                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                        <p className="text-black dark:text-white">{company.TVA}</p>
+                                    </div>
 
-                            <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                <p className="text-black dark:text-white">{company.TVA}</p>
-                            </div>
+                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                        <p className="text-meta-3">{company.Shareholders}</p>
+                                    </div>
 
-                            <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                <p className="text-meta-3">{company.Shareholders}</p>
-                            </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-black dark:text-white">{company.CIF}</p>
+                                    </div>
 
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-black dark:text-white">{company.CIF}</p>
-                            </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-meta-5">{company.COM}</p>
+                                    </div>
+                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                        <p className="text-black dark:text-white">{company.Headquarter}</p>
+                                    </div>
 
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-meta-5">{company.COM}</p>
-                            </div>
-                            <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                <p className="text-black dark:text-white">{company.Headquarter}</p>
-                            </div>
+                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                        <p className="text-meta-3">{company.Subsidiary}</p>
+                                    </div>
 
-                            <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                <p className="text-meta-3">{company.Subsidiary}</p>
-                            </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-black dark:text-white">{company.MainActivity}</p>
+                                    </div>
 
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-black dark:text-white">{company.MainActivity}</p>
-                            </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-meta-5">{company.SecondaryActivity}</p>
+                                    </div>
 
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-meta-5">{company.SecondaryActivity}</p>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-meta-5">{company.Interests}</p>
+                                    </div>
+                                </label>
+                                <ModalCompany companyId={company.CompanyId} modalId={`my_modal_${key}`} companyName={company.CompanyName} TVA={company.TVA} shareholders={company.Shareholders}
+                                    CIF={company.CIF} COM={company.COM} headquarter={company.Headquarter} subsidiary={company.Subsidiary}
+                                    mainActivity={company.MainActivity} secondaryActivity={company.SecondaryActivity} interests={company.Interests} secondButton={false} />
                             </div>
-
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-meta-5">{company.Interests}</p>
-                            </div>
-                        </label>
-                        <ModalCompany companyId={company.CompanyId} modalId={`my_modal_${key}`} companyName={company.CompanyName} TVA={company.TVA} shareholders={company.Shareholders} 
-                        CIF={company.CIF} COM={company.COM} headquarter={company.Headquarter} subsidiary={company.Subsidiary} 
-                        mainActivity={company.MainActivity} secondaryActivity={company.SecondaryActivity} interests={company.Interests} secondButton={false} />
+                        ))}
                     </div>
-                ))}
+                ) : (
+                    <Loader />
+                )}
             </div>
         </div>
     );

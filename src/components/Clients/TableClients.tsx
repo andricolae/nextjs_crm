@@ -1,4 +1,7 @@
+'use client'
+import React, { useEffect, useState } from "react";
 import ModalClients from "@/components/common/ModalClients";
+import Loader from "../common/Loader";
 
 type client = {
     ClientId: any,
@@ -14,11 +17,26 @@ type client = {
     Interests: any,
 }
 
-const TableClients = async () => {
-    const res = await fetch('http://localhost:3000/api/readClient', {
-        cache: 'no-store'
-    });
-    const clients: client[] = await res.json();
+const TableClients = () => {
+    const [clients, setClients] = useState<client[]>([]);
+
+    const getClients = async () => {
+        try {
+            await fetch(`/api/readClient`, {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setClients(data);
+                })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getClients();
+    }, []);
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -80,53 +98,59 @@ const TableClients = async () => {
                     </div>
                 </div>
 
-                {clients.map((client, key) => (
-                    <div key={key}>
-                        <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-10 ${key === clients.length - 1
-                            ? ""
-                            : "border-b border-stroke dark:border-strokedark"
-                            }`}>
-                            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                                <p className="hidden text-black dark:text-white sm:block">
-                                    {client.FirstName}
-                                </p>
-                            </div>
+                {clients?.length > 0 ? (
+                    <div>
+                        {clients.map((client, key) => (
+                            <div key={key}>
+                                <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-10 ${key === clients.length - 1
+                                    ? ""
+                                    : "border-b border-stroke dark:border-strokedark"
+                                    }`}>
+                                    <div className="flex items-center gap-3 p-2.5 xl:p-5">
+                                        <p className="hidden text-black dark:text-white sm:block">
+                                            {client.FirstName}
+                                        </p>
+                                    </div>
 
-                            <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                <p className="text-black dark:text-white">{client.LastName}</p>
-                            </div>
+                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                        <p className="text-black dark:text-white">{client.LastName}</p>
+                                    </div>
 
-                            <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                <p className="text-meta-3">{client.CI}</p>
-                            </div>
+                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                        <p className="text-meta-3">{client.CI}</p>
+                                    </div>
 
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-black dark:text-white">{client.CNP}</p>
-                            </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-black dark:text-white">{client.CNP}</p>
+                                    </div>
 
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-meta-5">{client.CompanyId}</p>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-meta-5">{client.CompanyId}</p>
+                                    </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-meta-5">{client.CompanyRole}</p>
+                                    </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-meta-5">{client.Address}</p>
+                                    </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-meta-5">{client.Email}</p>
+                                    </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-meta-5">{client.Phone}</p>
+                                    </div>
+                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                        <p className="text-meta-5">{client.Interests}</p>
+                                    </div>
+                                </label>
+                                <ModalClients clientId={client.ClientId} modalId={`my_modal_${key}`} firstName={client.FirstName} lastName={client.LastName} CI={client.CI} CNP={client.CNP} companyId={client.CompanyId}
+                                    companyRole={client.CompanyRole} address={client.Address} email={client.Email} phone={client.Phone} interests={client.Interests} secondButton={false} />
                             </div>
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-meta-5">{client.CompanyRole}</p>
-                            </div>
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-meta-5">{client.Address}</p>
-                            </div>
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-meta-5">{client.Email}</p>
-                            </div>
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-meta-5">{client.Phone}</p>
-                            </div>
-                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                <p className="text-meta-5">{client.Interests}</p>
-                            </div>
-                        </label>
-                        <ModalClients clientId={client.ClientId} modalId={`my_modal_${key}`} firstName={client.FirstName} lastName={client.LastName} CI={client.CI} CNP={client.CNP} companyId={client.CompanyId} 
-                        companyRole={client.CompanyRole} address={client.Address} email={client.Email} phone={client.Phone} interests={client.Interests} secondButton={false} />
+                        ))}
                     </div>
-                ))}
+                ) : (
+                    <Loader />
+                )}
 
             </div>
         </div>

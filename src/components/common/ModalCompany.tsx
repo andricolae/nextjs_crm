@@ -15,7 +15,7 @@ const ModalCompany = (props: any) => {
 
     const saveCompanyChanges = async () => {
         try {
-            await fetch(`http://localhost:3000/api/updateCompanyInfo/${props.companyId}`, {
+            await fetch(`/api/updateCompanyInfo/${props.companyId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const ModalCompany = (props: any) => {
 
     const addCompany = async () => {
         try {
-            await fetch(`http://localhost:3000/api/insertCompanyInfo`, {
+            await fetch(`/api/insertCompanyInfo`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const ModalCompany = (props: any) => {
 
     const deleteCompany = async () => {
         try {
-            await fetch(`http://localhost:3000/api/deleteCompanyInfo/${props.companyId}`, {
+            await fetch(`/api/deleteCompanyInfo/${props.companyId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

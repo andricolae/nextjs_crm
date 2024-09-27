@@ -15,7 +15,7 @@ const ModalClients = (props: any) => {
 
     const saveClientChanges = async () => {
         try {
-            await fetch(`http://localhost:3000/api/updateClients/${props.clientId}`, {
+            await fetch(`/api/updateClients/${props.clientId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const ModalClients = (props: any) => {
 
     const addClient = async () => {
         try {
-            await fetch(`http://localhost:3000/api/insertClient`, {
+            await fetch(`/api/insertClient`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const ModalClients = (props: any) => {
 
     const deleteClient = async () => {
         try {
-            await fetch(`http://localhost:3000/api/deleteClient/${props.clientId}`, {
+            await fetch(`/api/deleteClient/${props.clientId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
