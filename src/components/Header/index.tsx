@@ -51,20 +51,20 @@ const Header = (props: {
                     </button>
                     {/* <!-- Hamburger Toggle BTN --> */}
 
-                    <Link className="block flex-shrink-0 lg:hidden" href="/">
+                    {/* <Link className="block flex-shrink-0 lg:hidden" href="/">
                         <Image
                             width={32}
                             height={32}
                             src={"/images/logo/logo-icon.svg"}
                             alt="Logo"
                         />
-                    </Link>
+                    </Link> */}
                 </div>
 
                 <div className="hidden sm:block">
                     <form action="https://formbold.com/s/unique_form_id" method="POST">
                         <div className="relative">
-                            <button className="absolute left-0 top-1/2 -translate-y-1/2">
+                            <div className="absolute left-0 top-1/2 -translate-y-1/2">
                                 <svg
                                     className="fill-body hover:fill-primary dark:fill-bodydark dark:hover:fill-primary"
                                     width="20"
@@ -86,7 +86,7 @@ const Header = (props: {
                                         fill=""
                                     />
                                 </svg>
-                            </button>
+                            </div>
 
                             <input
                                 type="text"
@@ -104,11 +104,11 @@ const Header = (props: {
                         {/* <!-- Dark Mode Toggler --> */}
 
                         {/* <!-- Notification Menu Area --> */}
-                        <DropdownNotification />
+                        {/* <DropdownNotification /> */}
                         {/* <!-- Notification Menu Area --> */}
 
                         {/* <!-- Chat Notification Area --> */}
-                        <DropdownMessage />
+                        {/* <DropdownMessage /> */}
                         {/* <!-- Chat Notification Area --> */}
                     </ul>
 
