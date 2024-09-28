@@ -1,19 +1,54 @@
 ************************************************
 2. user/admin permissions
 3. admin
-    3.1 add/update/delete clients & services
     3.2 update/add message/email template & body
 4. users
-    4.1 send message/email --> ***
+    4.1 send message/email --> *****************
         4.1.2 
 5. filter & search
 6. emailing services
 7. messaging services
 *************************************************
 
+*******************
+services table view
+*******************
+
+****************
+emailing for 2FA
+****************
+
 *****************************************
 dropdown select client-company connection
 *****************************************
+
+*************************************
+UI input fields at table update & add
+*************************************
+
+***************
+UI table views!
+***************
+
+*********************************
+home dashboard + account settings
+*********************************
+
+*********************************
+buton logout
+*********************************
+
+*********************************
+home dashboard + account settings
+*********************************
+
+
+
+
+
+
+
+
 
 *************************
 SHA2('your_password',512)
