@@ -23,7 +23,6 @@ const TableClients = () => {
     const getClients = async () => {
         let value = sessionStorage.getItem("akrapovik");
         if (value != "gintani") {
-            alert("Logheazate baaaaaa")
             window.location.href = "/";
         }
         try {
