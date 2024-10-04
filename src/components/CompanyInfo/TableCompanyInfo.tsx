@@ -21,6 +21,10 @@ const TableCompanyInfo = () => {
     const [companies, setCompanies] = useState<company[]>([]);
 
     const getCompanies = async () => {
+        let value = sessionStorage.getItem("akrapovik");
+        if (value != "gintani") {
+            window.location.href = "/";
+        }
         try {
             await fetch(`/api/readCompanyInfo`, {
                 method: 'GET',

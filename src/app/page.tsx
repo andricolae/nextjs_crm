@@ -33,6 +33,7 @@ const SignIn: React.FC = () => {
                         if (data.length === 0) {
                             alert("Invalid user or password");
                         } else {
+                            sessionStorage.setItem("akrapovik", "gintani");
                             window.location.href = "/clients";
                         }
                     });
