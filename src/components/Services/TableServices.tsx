@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import ModalServices from "@/components/common/ModalServices";
 import Loader from "../common/Loader";
 
-type client = {
+type service = {
     Id: any,
     Name: any,
     Description: any,
@@ -11,9 +11,13 @@ type client = {
 }
 
 const TableServices = () => {
-    const [services, setServices] = useState<client[]>([]);
+    const [services, setServices] = useState<service[]>([]);
 
     const getServices = async () => {
+        let value = sessionStorage.getItem("akrapovik");
+        if (value != "gintani") {
+            window.location.href = "/";
+        }
         try {
             await fetch('api/readService', {
                 method: 'GET',
@@ -32,13 +36,13 @@ const TableServices = () => {
     }, []);
 
     return (
-        <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+        <div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
                 Services
             </h4>
 
             <div className="flex flex-col">
-                <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-10">
+                <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-3">
                     <div className="p-2.5 xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
                             Service Name
@@ -60,7 +64,7 @@ const TableServices = () => {
                     <div>
                         {services.map((service, key) => (
                             <div key={key}>
-                                <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-10 ${key === services.length - 1
+                                <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-3 ${key === services.length - 1
                                     ? ""
                                     : "border-b border-stroke dark:border-strokedark"
                                     }`}>
@@ -79,14 +83,13 @@ const TableServices = () => {
                                     </div>
 
                                 </label>
-                                <ModalServices Id={service.Id} modalId={`my_modal_${key}`} Name={service.Name} Description={service.Description} Price={service.Price} secondButton={false} />
+                                <ModalServices Id={service.Id} modalId={`my_modal_${key}`} name={service.Name} description={service.Description} price={service.Price} secondButton={false} />
                             </div>
                         ))}
                     </div>
                 ) : (
                     <Loader />
                 )}
-
             </div>
         </div>
     );

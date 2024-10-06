@@ -21,6 +21,10 @@ const TableClients = () => {
     const [clients, setClients] = useState<client[]>([]);
 
     const getClients = async () => {
+        let value = sessionStorage.getItem("akrapovik");
+        if (value != "gintani") {
+            window.location.href = "/";
+        }
         try {
             await fetch(`/api/readClient`, {
                 method: 'GET',
