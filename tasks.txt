@@ -21,7 +21,7 @@ filter & search
 
 555555555555555555555555555555555
 *********************************
-home dashboard + account settings
+home dashboard (key metrics -> numar de mesaje trimise si numar de mailuri trimise + concluzia lor cu status contorizat) + account settings
 *********************************
 
 6666666666666666
