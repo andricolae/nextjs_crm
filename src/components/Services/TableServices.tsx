@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from "react";
 import ModalServices from "@/components/common/ModalServices";
 import Loader from "../common/Loader";
+import useStore from "../common/StoreForSearch";
 
 type service = {
     Id: any,
@@ -12,6 +13,9 @@ type service = {
 
 const TableServices = () => {
     const [services, setServices] = useState<service[]>([]);
+    const [filteredService, setFilteredService] = useState<service[]>([]);
+    const searchTerm = useStore((state) => state.searchTerm);
+    const setSearchTerm = useStore((state) => state.setSearchTerm);
 
     const getServices = async () => {
         let value = sessionStorage.getItem("akrapovik");
@@ -32,8 +36,19 @@ const TableServices = () => {
     }
 
     useEffect(() => {
+        setSearchTerm("");
         getServices();
     }, []);
+
+    useEffect(() => {
+        const filtered = services.filter((service) =>
+            service.Name?.toLowerCase().includes(searchTerm?.toLocaleLowerCase()) ||
+            service.Description?.toString().includes(searchTerm?.toLocaleLowerCase()) ||
+            service.Price?.toString().includes(searchTerm?.toLocaleLowerCase())
+        );
+
+        setFilteredService(filtered);
+    }, [services, searchTerm]);
 
     return (
         <div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -60,9 +75,9 @@ const TableServices = () => {
                     </div>
                 </div>
 
-                {services?.length > 0 ? (
+                {filteredService?.length > 0 ? (
                     <div>
-                        {services.map((service, key) => (
+                        {filteredService.map((service, key) => (
                             <div key={key}>
                                 <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-3 ${key === services.length - 1
                                     ? ""

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import ModalClients from "@/components/common/ModalClients";
 import Loader from "../common/Loader";
+import useStore from "../common/StoreForSearch";
 
 type client = {
     ClientId: any,
@@ -19,6 +20,9 @@ type client = {
 
 const TableClients = () => {
     const [clients, setClients] = useState<client[]>([]);
+    const [filteredClients, setFilteredClients] = useState<client[]>([]);
+    const searchTerm = useStore((state) => state.searchTerm);
+    const setSearchTerm = useStore((state) => state.setSearchTerm);
 
     const getClients = async () => {
         let value = sessionStorage.getItem("akrapovik");
@@ -28,10 +32,10 @@ const TableClients = () => {
         try {
             await fetch(`/api/readClient`, {
                 method: 'GET',
-            })
-                .then(response => response.json())
+            }).then(response => response.json())
                 .then(data => {
                     setClients(data);
+                    setFilteredClients(data);
                 })
         } catch (error) {
             console.log(error);
@@ -39,11 +43,30 @@ const TableClients = () => {
     }
 
     useEffect(() => {
+        setSearchTerm("");
         getClients();
     }, []);
 
+
+    useEffect(() => {
+        const filtered = clients.filter((client) =>
+            client.FirstName?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+            client.LastName?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+            client.CI?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+            client.CNP?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+            client.CompanyId?.toString().includes(searchTerm?.toLowerCase()) ||
+            client.CompanyRole?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+            client.Address?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+            client.Email?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+            client.Phone?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+            client.Interests?.toLowerCase().includes(searchTerm?.toLowerCase())
+        );
+
+        setFilteredClients(filtered);
+    }, [searchTerm, clients]);
+
     return (
-        <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+        <div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
                 Clients
             </h4>
@@ -102,9 +125,9 @@ const TableClients = () => {
                     </div>
                 </div>
 
-                {clients?.length > 0 ? (
+                {filteredClients?.length > 0 ? (
                     <div>
-                        {clients.map((client, key) => (
+                        {filteredClients.map((client, key) => (
                             <div key={key}>
                                 <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-10 ${key === clients.length - 1
                                     ? ""

@@ -86,19 +86,19 @@ const ModalCompany = (props: any) => {
                 <div className="modal-box w-[70%] max-w-3xl">
                     <div className="grid grid-cols-1 sm:grid-rows-10">
                         <label htmlFor={props.modalId} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">X</label>
-                        <input placeholder="Company name" value={companyName} className="flex items-center gap-3 p-2.5 xl:p-5 text-black" onChange={(e) => setCompanyName(e.target.value)} />
-                        <input placeholder="TVA" value={TVA} className="flex items-center justify-center p-2.5 xl:p-5 text-black" onChange={(e) => setTVA(e.target.value)} />
-                        <input placeholder="Shareholders" value={shareholders} className="flex items-center justify-center p-2.5 xl:p-5 text-meta-3" onChange={(e) => setShareholders(e.target.value)} />
-                        <input placeholder="CIF" value={CIF} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-black" onChange={(e) => setCIF(e.target.value)} />
-                        <input placeholder="COM" value={COM} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setCOM(e.target.value)} />
-                        <input placeholder="Headquarter" value={headquarter} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setHeadquarter(e.target.value)} />
-                        <input placeholder="Subsidiary" value={subsidiary} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setSubsidiary(e.target.value)} />
-                        <input placeholder="Main activity" value={mainActivity} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setMainActivity(e.target.value)} />
-                        <input placeholder="Second activity" value={secondaryActivity} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setSecondaryActivity(e.target.value)} />
-                        <input placeholder="Interests" value={interests} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setInterests(e.target.value)} />
+                        <input placeholder="Company name" value={companyName} className="flex items-center gap-3 p-2.5 xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setCompanyName(e.target.value)} />
+                        <input placeholder="TVA" value={TVA} className="flex items-center justify-center p-2.5 xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setTVA(e.target.value)} />
+                        <input placeholder="Shareholders" value={shareholders} className="flex items-center justify-center p-2.5 xl:p-5 text-meta-3 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setShareholders(e.target.value)} />
+                        <input placeholder="CIF" value={CIF} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setCIF(e.target.value)} />
+                        <input placeholder="COM" value={COM} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setCOM(e.target.value)} />
+                        <input placeholder="Headquarter" value={headquarter} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setHeadquarter(e.target.value)} />
+                        <input placeholder="Subsidiary" value={subsidiary} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setSubsidiary(e.target.value)} />
+                        <input placeholder="Main activity" value={mainActivity} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setMainActivity(e.target.value)} />
+                        <input placeholder="Second activity" value={secondaryActivity} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setSecondaryActivity(e.target.value)} />
+                        <input placeholder="Interests" value={interests} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setInterests(e.target.value)} />
                     </div>
                     <div className="modal-action">
-                        <label htmlFor={props.modalId} className="btn btn-info" onClick={props.secondButton === false ? saveCompanyChanges : addCompany}>Save</label>
+                        <label htmlFor={props.modalId} className="btn btn-info text-white" onClick={props.secondButton === false ? saveCompanyChanges : addCompany}>Save</label>
                         <button className="btn btn-outline btn-error" onClick={deleteCompany} disabled={props.secondButton} style={{ display: props.secondButton ? "none" : "inline-block" }}>Delete</button>
                     </div>
                 </div>

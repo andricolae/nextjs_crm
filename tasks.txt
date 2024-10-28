@@ -1,14 +1,9 @@
-111111111111
-************
-buton logout
-************
-
 222222222222222222222222222222
 ******************************
 dropdown select client-company
-******************************
+******************************                 COMPANY ID SHOW NAME NOT ID
 
-3333333333333333333333333333333333333
+POSTPONE
 *************************************
 UI input fields at table update & add
 UI table views
@@ -36,10 +31,16 @@ admin can -> crud on tables/ update email & sms templates
 users can -> send emails & sms
 *********************************************************
 
-
 #########################################################
-
 
 *************************
 SHA2('your_password',512)
 *************************
+
+
+
+GDPR
+
+Cpanel login
+
+Import clients, companies, services from file

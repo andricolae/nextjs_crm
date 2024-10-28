@@ -65,13 +65,13 @@ const ModalServices = (props: any) => {
                 <div className="modal-box w-[70%] max-w-3xl">
                     <div className="grid grid-cols-1 sm:grid-rows-3">
                         <label htmlFor={props.modalId} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">X</label>
-                        <input placeholder="Name" value={name} className="flex items-center gap-3 p-2.5 xl:p-5 text-black" onChange={(e) => setName(e.target.value)} />
-                        <input placeholder="Description" value={description} className="flex items-center justify-center p-2.5 xl:p-5 text-black" onChange={(e) => setDescription(e.target.value)} />
-                        <input placeholder="Price" value={price} className="flex items-center justify-center p-2.5 xl:p-5 text-meta-3" onChange={(e) => setPrice(e.target.value)} />
+                        <input placeholder="Name" value={name} className="flex items-center gap-3 p-2.5 xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setName(e.target.value)} />
+                        <input placeholder="Description" value={description} className="flex items-center justify-center p-2.5 xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setDescription(e.target.value)} />
+                        <input placeholder="Price" value={price} className="flex items-center justify-center p-2.5 xl:p-5 text-meta-3 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setPrice(e.target.value)} />
                     </div>
 
                     <div className="modal-action">
-                        <label htmlFor={props.modalId} className="btn btn-info" onClick={props.secondButton === false ? saveServiceChanges : addService}>Save</label>
+                        <label htmlFor={props.modalId} className="btn btn-info text-white" onClick={props.secondButton === false ? saveServiceChanges : addService}>Save</label>
                         <button className="btn btn-outline btn-error" onClick={deleteService} disabled={props.secondButton} style={{ display: props.secondButton ? "none" : "inline-block" }}>Delete</button>
                     </div>
                 </div>

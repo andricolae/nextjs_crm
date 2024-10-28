@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import ModalCompany from "../common/ModalCompany";
 import Loader from "../common/Loader";
+import useStore from "../common/StoreForSearch";
 
 type company = {
     CompanyId: any,
@@ -19,6 +20,9 @@ type company = {
 
 const TableCompanyInfo = () => {
     const [companies, setCompanies] = useState<company[]>([]);
+    const [filteredCompany, setFilteredCompany] = useState<company[]>([]);
+    const searchTerm = useStore((state) => state.searchTerm);
+    const setSearchTerm = useStore((state) => state.setSearchTerm);
 
     const getCompanies = async () => {
         let value = sessionStorage.getItem("akrapovik");
@@ -39,8 +43,26 @@ const TableCompanyInfo = () => {
     }
 
     useEffect(() => {
+        setSearchTerm("");
         getCompanies();
     }, []);
+
+    useEffect(() => {
+        const filtered = companies.filter((company) =>
+            company.CompanyName?.toLowerCase().includes(searchTerm?.toLocaleLowerCase()) ||
+            company.TVA?.toString().includes(searchTerm?.toLocaleLowerCase()) ||
+            company.Shareholders?.toLowerCase().includes(searchTerm?.toLocaleLowerCase()) ||
+            company.CIF?.toString().includes(searchTerm?.toLocaleLowerCase()) ||
+            company.COM?.toLowerCase().includes(searchTerm?.toLocaleLowerCase()) ||
+            company.Headquarter?.toLowerCase().includes(searchTerm?.toLocaleLowerCase()) ||
+            company.Subsidiary?.toLowerCase().includes(searchTerm?.toLocaleLowerCase()) ||
+            company.MainActivity?.toLowerCase().includes(searchTerm?.toLocaleLowerCase()) ||
+            company.SecondaryActivity?.toLowerCase().includes(searchTerm?.toLocaleLowerCase()) ||
+            company.Interests?.toLowerCase().includes(searchTerm?.toLocaleLowerCase())
+        );
+
+        setFilteredCompany(filtered);
+    }, [companies, searchTerm]);
 
     return (
         <div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -101,9 +123,9 @@ const TableCompanyInfo = () => {
                         </h5>
                     </div>
                 </div>
-                {companies?.length > 0 ? (
+                {filteredCompany?.length > 0 ? (
                     <div>
-                        {companies.map((company, key) => (
+                        {filteredCompany.map((company, key) => (
                             <div key={key}>
                                 <label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-10 ${key === companies.length - 1
                                     ? ""

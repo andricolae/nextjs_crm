@@ -1,14 +1,32 @@
+'use client'
 import Link from "next/link";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import DropdownMessage from "./DropdownMessage";
 import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdownUser";
 import Image from "next/image";
+import { useState } from "react";
+import useStore from "../common/StoreForSearch";
 
 const Header = (props: {
     sidebarOpen: string | boolean | undefined;
     setSidebarOpen: (arg0: boolean) => void;
 }) => {
+
+    const [inputValue, setInputValue] = useState<string>("");
+
+    const setSearchTerm = useStore((state) => state.setSearchTerm);
+
+    const handleInputChange = (event: any) => {
+        setSearchTerm(event.target.value);
+        setInputValue(event.target.value);
+    };
+
+    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setInputValue(e.target.value);
+    //     sessionStorage.setItem('searchQuery', e.target.value);
+    // };
+
     return (
         <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
             <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
@@ -62,7 +80,7 @@ const Header = (props: {
                 </div>
 
                 <div className="hidden sm:block">
-                    <form action="https://formbold.com/s/unique_form_id" method="POST">
+                    <form method="GET">
                         <div className="relative">
                             <div className="absolute left-0 top-1/2 -translate-y-1/2">
                                 <svg
@@ -90,6 +108,8 @@ const Header = (props: {
 
                             <input
                                 type="text"
+                                value={inputValue}
+                                onChange={(event) => { handleInputChange(event); }}
                                 placeholder="Type to search..."
                                 className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
                             />

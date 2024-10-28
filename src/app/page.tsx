@@ -5,7 +5,6 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import * as crypto from 'crypto';
 
 const SignIn: React.FC = () => {
-    
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
@@ -15,6 +14,7 @@ const SignIn: React.FC = () => {
         } else {
             console.log(email);
             console.log(password);
+            let companiesArray: {id: String, companyName: String}[] = [];
             try {
                 await fetch(`/api/login`, {
                     method: 'PUT',
@@ -25,15 +25,25 @@ const SignIn: React.FC = () => {
                         Email: email,
                         Password: crypto.createHash('sha512').update(password, 'utf8').digest('hex'),
                     }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
+                }).then(response => response.json())
+                    .then(async data => {
                         console.log(data);
                         console.log(data.length);
                         if (data.length === 0) {
                             alert("Invalid user or password");
                         } else {
                             sessionStorage.setItem("akrapovik", "gintani");
+
+                            await fetch(`/api/readCompanyInfo`, {
+                                method: 'GET',
+                            }).then(response => response.json())
+                                .then(data => {
+                                    data.forEach((element: any) => {
+                                        companiesArray.push({ id: element.CompanyId, companyName: element.CompanyName })
+                                    });
+                                    sessionStorage.setItem("companiesArray", JSON.stringify(companiesArray));
+                                }).catch(error => console.log(error))
+
                             window.location.href = "/clients";
                         }
                     });

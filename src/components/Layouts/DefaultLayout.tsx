@@ -1,14 +1,11 @@
 "use client";
-import React, { useState, ReactNode } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import React, { useState } from "react";
 
-export default function DefaultLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function DefaultLayout({ children, }: { children: React.ReactNode; }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState<string>('');
     return (
         <>
             {/* <!-- ===== Page Wrapper Start ===== --> */}
@@ -27,9 +24,11 @@ export default function DefaultLayout({
 
                     {/* <!-- ===== Main Content Start ===== --> */}
                     <main>
-                        <div className="mx-auto max-w-screen-2xl pt-8 pb-8">
-                            {children}
-                        </div>
+                        {/* <SearchContext.Provider value={{ searchTerm, setSearchTerm }}> */}
+                            <div className="mx-auto max-w-screen-2xl pt-8 pb-8">
+                                {children}
+                            </div>
+                        {/* </SearchContext.Provider> */}
                     </main>
                     {/* <!-- ===== Main Content End ===== --> */}
                 </div>

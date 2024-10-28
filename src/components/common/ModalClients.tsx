@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const ModalClients = (props: any) => {
     const [firstName, setFirstName] = useState<string | undefined>(props.firstName);
@@ -12,6 +12,19 @@ const ModalClients = (props: any) => {
     const [email, setEmail] = useState<string | undefined>(props.email);
     const [phone, setPhone] = useState<string | undefined>(props.phone);
     const [interests, setInterests] = useState<string | undefined>(props.interests);
+
+    const [companiesArray, setCompaniesArray] = useState<{ id: string, companyName: string }[]>(JSON.parse(sessionStorage.getItem("companiesArray") || "[]"));
+    const detailsRef = useRef<HTMLDetailsElement>(null);
+    const [companyIdLayout, setCompanyIdLayout] = useState<string>("Company ID")
+
+    const handleItemClick = (companyId: any, companyName: string) => {
+        setCompanyId(companyId);
+        setCompanyIdLayout(companyName);
+
+        if (detailsRef.current) {
+            detailsRef.current.removeAttribute('open');
+        }
+    };
 
     const saveClientChanges = async () => {
         try {
@@ -86,19 +99,29 @@ const ModalClients = (props: any) => {
                 <div className="modal-box w-[70%] max-w-3xl">
                     <div className="grid grid-cols-1 sm:grid-rows-10">
                         <label htmlFor={props.modalId} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">X</label>
-                        <input placeholder="First Name" value={firstName} className="flex items-center gap-3 p-2.5 xl:p-5 text-black" onChange={(e) => setFirstName(e.target.value)} />
-                        <input placeholder="Last Name" value={lastName} className="flex items-center justify-center p-2.5 xl:p-5 text-black" onChange={(e) => setLastName(e.target.value)} />
-                        <input placeholder="CI" value={CI} className="flex items-center justify-center p-2.5 xl:p-5 text-meta-3" onChange={(e) => setCI(e.target.value)} />
-                        <input placeholder="CNP" value={CNP} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-black" onChange={(e) => setCNP(e.target.value)} />
-                        <input placeholder="Company ID" value={companyId} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setCompanyId(e.target.value)} />
-                        <input placeholder="Company role" value={companyRole} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setCompanyRole(e.target.value)} />
-                        <input placeholder="Address" value={address} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setAddress(e.target.value)} />
-                        <input placeholder="Email" value={email} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setEmail(e.target.value)} />
-                        <input placeholder="Phone" value={phone} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setPhone(e.target.value)} />
-                        <input placeholder="Interests" value={interests} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5" onChange={(e) => setInterests(e.target.value)} />
+                        
+                        <input placeholder="First Name" value={firstName} className="flex items-center gap-3 p-2.5 xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setFirstName(e.target.value)} />
+                        <input placeholder="Last Name" value={lastName} className="flex items-center justify-center p-2.5 xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setLastName(e.target.value)} />
+                        <input placeholder="CI" value={CI} className="flex items-center justify-center p-2.5 xl:p-5 text-meta-3 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setCI(e.target.value)} />
+                        <input placeholder="CNP" value={CNP} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setCNP(e.target.value)} />
+
+                        <details className="dropdown hidden p-2.5 sm:flex xl:p-5 text-black" ref={detailsRef}>
+                            <summary className="btn m-1">{companyIdLayout}</summary>
+                            <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                                {companiesArray.map((company, index) => (
+                                    <li key={index} onClick={() => handleItemClick(company.id, company.companyName)}><a>{company.companyName}</a></li>
+                                ))}
+                            </ul>
+                        </details>
+
+                        <input placeholder="Company role" value={companyRole} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setCompanyRole(e.target.value)} />
+                        <input placeholder="Address" value={address} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setAddress(e.target.value)} />
+                        <input placeholder="Email" value={email} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setEmail(e.target.value)} />
+                        <input placeholder="Phone" value={phone} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setPhone(e.target.value)} />
+                        <input placeholder="Interests" value={interests} className="hidden items-center justify-center p-2.5 sm:flex xl:p-5 text-meta-5 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setInterests(e.target.value)} />
                     </div>
                     <div className="modal-action">
-                        <label htmlFor={props.modalId} className="btn btn-info" onClick={props.secondButton === false ? saveClientChanges : addClient}>Save</label>
+                        <label htmlFor={props.modalId} className="btn btn-info text-white" onClick={props.secondButton === false ? saveClientChanges : addClient}>Save</label>
                         <button className="btn btn-outline btn-error" onClick={deleteClient} disabled={props.secondButton} style={{ display: props.secondButton ? "none" : "inline-block" }}>Delete</button>
                     </div>
                 </div>
