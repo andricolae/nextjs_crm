@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 const ModalClients = (props: any) => {
     const [firstName, setFirstName] = useState<string | undefined>(props.firstName);

@@ -5,7 +5,6 @@ import React, { useState } from "react";
 
 export default function DefaultLayout({ children, }: { children: React.ReactNode; }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState<string>('');
     return (
         <>
             {/* <!-- ===== Page Wrapper Start ===== --> */}
@@ -24,11 +23,9 @@ export default function DefaultLayout({ children, }: { children: React.ReactNode
 
                     {/* <!-- ===== Main Content Start ===== --> */}
                     <main>
-                        {/* <SearchContext.Provider value={{ searchTerm, setSearchTerm }}> */}
-                            <div className="mx-auto max-w-screen-2xl pt-8 pb-8">
-                                {children}
-                            </div>
-                        {/* </SearchContext.Provider> */}
+                        <div className="mx-auto max-w-screen-2xl pt-8 pb-8">
+                            {children}
+                        </div>
                     </main>
                     {/* <!-- ===== Main Content End ===== --> */}
                 </div>

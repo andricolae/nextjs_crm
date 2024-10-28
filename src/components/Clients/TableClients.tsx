@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from "react";
 import ModalClients from "@/components/common/ModalClients";
 import Loader from "../common/Loader";
@@ -23,6 +23,7 @@ const TableClients = () => {
     const [filteredClients, setFilteredClients] = useState<client[]>([]);
     const searchTerm = useStore((state) => state.searchTerm);
     const setSearchTerm = useStore((state) => state.setSearchTerm);
+    const [companiesArray, setCompaniesArray] = useState<{ CompanyId: string, CompanyName: string }[]>(JSON.parse(sessionStorage.getItem("companiesArray") || "[]"));
 
     const getClients = async () => {
         let value = sessionStorage.getItem("akrapovik");
@@ -152,7 +153,9 @@ const TableClients = () => {
                                     </div>
 
                                     <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-meta-5">{client.CompanyId}</p>
+                                        <p className="text-meta-5">
+                                            {companiesArray.find(comp => comp.CompanyId === client.CompanyId)?.CompanyName || "Unknown"}
+                                        </p>
                                     </div>
                                     <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
                                         <p className="text-meta-5">{client.CompanyRole}</p>
