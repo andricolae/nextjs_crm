@@ -4,8 +4,10 @@ import Image from 'next/image';
 import * as crypto from 'crypto';
 
 const SettingsContent = () => {
-    const [newPassword, setNewPassword] = useState<string>('');
-    const [confirmNewPassword, setConfirmNewPassword] = useState<string>('');
+    const [newPassword, setNewPassword] = useState<string>("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+    const email = sessionStorage.getItem("Email");
+    const name = sessionStorage.getItem("Name");
 
     const handleNewPasswordInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewPassword(event.target.value);
@@ -103,7 +105,7 @@ const SettingsContent = () => {
                                                 id="fullName"
                                             // placeholder="Devid Jhon"
                                             // defaultValue="Devid Jhon"
-                                            >Devid Jhon</div>
+                                            >{name}</div>
                                         </div>
                                     </div>
 
@@ -165,7 +167,7 @@ const SettingsContent = () => {
                                             id="emailAddress"
                                         // placeholder="devidjond45@gmail.com"
                                         // defaultValue="devidjond45@gmail.com"
-                                        >devidjond45@gmail.com</div>
+                                        >{email}</div>
                                     </div>
                                 </div>
 

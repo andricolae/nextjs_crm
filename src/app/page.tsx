@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState } from "react";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -7,14 +7,49 @@ import * as crypto from 'crypto';
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [isVisibleInputEmailCode, setIsVisibleInputEmailCode] = useState<boolean>(false);
+    const [securityCodeGenerated, setSecurityCodeGenerated] = useState<string>(generateRandomSixDigitNumber().toString());
+    const [securityCodeFromInput, setSecurityCodeFromInput] = useState<string>("");
+
+    function generateRandomSixDigitNumber() {
+        return Math.floor(100000 + Math.random() * 900000);
+    }
+
+    const send2FAemail = async () => {
+        console.log(securityCodeGenerated);
+        try {
+            const response = await fetch(`/api/sendEmail/${email}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Message: "1234",
+                    Code: securityCodeGenerated,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            setIsVisibleInputEmailCode(true);
+
+            // const result = await response.json();
+            // return result;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const login = async () => {
+        // setSecurityCodeGenerated(generateRandomSixDigitNumber().toString());
+        console.log(securityCodeGenerated);
         if (email === "" || password === "") {
             alert("Type email and password.")
         } else {
-            console.log(email);
-            console.log(password);
-            let companiesArray: { CompanyId: String, CompanyName: String }[] = [];
+            // set2FAemail();
+            // console.log(email);
+            // console.log(password);
+            // let companiesArray: { CompanyId: String, CompanyName: String }[] = [];
             try {
                 await fetch(`/api/login`, {
                     method: 'PUT',
@@ -27,25 +62,31 @@ const SignIn: React.FC = () => {
                     }),
                 }).then(response => response.json())
                     .then(async data => {
-                        console.log(data);
-                        sessionStorage.setItem("EmployeeId", data[0].EmployeeId);
-                        console.log(data.length);
+                        // console.log(data);
+                        // console.log(data.length);
                         if (data.length === 0) {
                             alert("Invalid user or password");
                         } else {
-                            sessionStorage.setItem("akrapovik", "gintani");
+                            sessionStorage.setItem("EmployeeId", data[0].EmployeeId);
+                            sessionStorage.setItem("Name", data[0].Name);
+                            sessionStorage.setItem("Level", data[0].Level);
+                            sessionStorage.setItem("Email", data[0].Email);
+                            send2FAemail();
 
-                            await fetch(`/api/readCompanyInfo`, {
-                                method: 'GET',
-                            }).then(response => response.json())
-                                .then(data => {
-                                    data.forEach((element: any) => {
-                                        companiesArray.push({ CompanyId: element.CompanyId, CompanyName: element.CompanyName })
-                                    });
-                                    sessionStorage.setItem("companiesArray", JSON.stringify(companiesArray));
-                                }).catch(error => console.log(error))
+                            // await readCompanyInfo();
+                            // sessionStorage.setItem("akrapovik", "gintani");
 
-                            window.location.href = "/clients";
+                            // await fetch(`/api/readCompanyInfo`, {
+                            //     method: 'GET',
+                            // }).then(response => response.json())
+                            //     .then(data => {
+                            //         data.forEach((element: any) => {
+                            //             companiesArray.push({ CompanyId: element.CompanyId, CompanyName: element.CompanyName })
+                            //         });
+                            //         sessionStorage.setItem("companiesArray", JSON.stringify(companiesArray));
+                            //     }).catch(error => console.log(error))
+
+                            // window.location.href = "/clients";
                         }
                     });
             } catch (error) {
@@ -55,9 +96,48 @@ const SignIn: React.FC = () => {
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        console.log(securityCodeGenerated);
         if (event.key === 'Enter') {
             event.preventDefault();
             login();
+        }
+    };
+
+    const readCompanyInfo = async () => {
+        console.log(securityCodeGenerated);
+        let companiesArray: { CompanyId: String, CompanyName: String }[] = [];
+        try {
+            await fetch(`/api/readCompanyInfo`, {
+                method: 'GET',
+            }).then(response => response.json())
+                .then(data => {
+                    data.forEach((element: any) => {
+                        companiesArray.push({ CompanyId: element.CompanyId, CompanyName: element.CompanyName })
+                    });
+                    sessionStorage.setItem("companiesArray", JSON.stringify(companiesArray));
+                }).catch(error => console.log(error))
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const checkSecurityCode = () => {
+        console.log(securityCodeFromInput);
+        console.log(securityCodeGenerated);
+        if (securityCodeFromInput !== securityCodeGenerated) {
+            alert("Invalid security code");
+            return;
+        }
+        readCompanyInfo();
+        sessionStorage.setItem("akrapovik", "gintani");
+        window.location.href = "/clients";
+    }
+
+    const handleKeyDownSecurityCode = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        console.log(securityCodeGenerated);
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            checkSecurityCode();
         }
     };
 
@@ -294,7 +374,7 @@ const SignIn: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <button onClick={() => login()}
+                                <button onClick={login}
                                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90">
                                     {/* <Link className="mb-5" href="/clients"> */}
                                     {/* <input
@@ -305,6 +385,42 @@ const SignIn: React.FC = () => {
                                     Sign In
                                     {/* </Link> */}
                                 </button>
+
+                                {isVisibleInputEmailCode &&
+                                    <div className="mb-6 pt-2">
+                                        <div className="relative">
+                                            <input
+                                                type="number"
+                                                placeholder="Code from email"
+                                                className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                onChange={e => setSecurityCodeFromInput(e.target.value)}
+                                                onKeyDown={handleKeyDownSecurityCode}
+                                            />
+
+                                            <span className="absolute right-4 top-4">
+                                                <svg
+                                                    className="fill-current"
+                                                    width="22"
+                                                    height="22"
+                                                    viewBox="0 0 22 22"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <g opacity="0.5">
+                                                        <path
+                                                            d="M16.1547 6.80626V5.91251C16.1547 3.16251 14.0922 0.825009 11.4797 0.618759C10.0359 0.481259 8.59219 0.996884 7.52656 1.95938C6.46094 2.92188 5.84219 4.29688 5.84219 5.70626V6.80626C3.84844 7.18438 2.33594 8.93751 2.33594 11.0688V17.2906C2.33594 19.5594 4.19219 21.3813 6.42656 21.3813H15.5016C17.7703 21.3813 19.6266 19.525 19.6266 17.2563V11C19.6609 8.93751 18.1484 7.21876 16.1547 6.80626ZM8.55781 3.09376C9.31406 2.40626 10.3109 2.06251 11.3422 2.16563C13.1641 2.33751 14.6078 3.98751 14.6078 5.91251V6.70313H7.38906V5.67188C7.38906 4.70938 7.80156 3.78126 8.55781 3.09376ZM18.1141 17.2906C18.1141 18.7 16.9453 19.8688 15.5359 19.8688H6.46094C5.05156 19.8688 3.91719 18.7344 3.91719 17.325V11.0688C3.91719 9.52189 5.15469 8.28438 6.70156 8.28438H15.2953C16.8422 8.28438 18.1141 9.52188 18.1141 11V17.2906Z"
+                                                            fill=""
+                                                        />
+                                                        <path
+                                                            d="M10.9977 11.8594C10.5852 11.8594 10.207 12.2031 10.207 12.65V16.2594C10.207 16.6719 10.5508 17.05 10.9977 17.05C11.4102 17.05 11.7883 16.7063 11.7883 16.2594V12.6156C11.7883 12.2031 11.4102 11.8594 10.9977 11.8594Z"
+                                                            fill=""
+                                                        />
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                }
 
                                 {/* <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                                     <span>

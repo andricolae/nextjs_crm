@@ -6,13 +6,8 @@ UI table views
 
 555555555555555555555555555555555
 *********************************
-home dashboard (key metrics -> numar de mesaje trimise si numar de mailuri trimise + concluzia lor cu status contorizat) + account settings
+home dashboard (key metrics -> numar de mesaje trimise si numar de mailuri trimise + concluzia lor cu status contorizat)
 *********************************
-
-6666666666666666
-****************
-emailing 2FA
-****************
 
 777777777777777777777777777777777777777777777777777777777
 *********************************************************
@@ -27,10 +22,12 @@ users can -> send emails & sms
 SHA2('your_password',512)
 *************************
 
-
-
 GDPR
 
 Cpanel login
 
 Import clients, companies, services from file
+
+UX - inform about request statuses
+
+routes cookies not sessionStorage
