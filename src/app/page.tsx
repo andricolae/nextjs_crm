@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import * as crypto from 'crypto';
+import { createHash } from 'crypto';
+import InfoPopup from "@/components/common/InfoPopup";
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState<string>("");
@@ -16,7 +17,6 @@ const SignIn: React.FC = () => {
     }
 
     const send2FAemail = async () => {
-        console.log(securityCodeGenerated);
         try {
             const response = await fetch(`/api/sendEmail/${email}`, {
                 method: 'PUT',
@@ -24,32 +24,24 @@ const SignIn: React.FC = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    Message: "1234",
-                    Code: securityCodeGenerated,
+                    Subject: "Security code",
+                    EmailText: securityCodeGenerated,
                 }),
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
+            InfoPopup(`Security code sent on email ${securityCodeGenerated}`);
             setIsVisibleInputEmailCode(true);
-
-            // const result = await response.json();
-            // return result;
         } catch (error) {
             console.error(error);
         }
     }
 
     const login = async () => {
-        // setSecurityCodeGenerated(generateRandomSixDigitNumber().toString());
-        console.log(securityCodeGenerated);
         if (email === "" || password === "") {
-            alert("Type email and password.")
+            InfoPopup("Type email and password.")
         } else {
-            // set2FAemail();
-            // console.log(email);
-            // console.log(password);
-            // let companiesArray: { CompanyId: String, CompanyName: String }[] = [];
             try {
                 await fetch(`/api/login`, {
                     method: 'PUT',
@@ -58,35 +50,18 @@ const SignIn: React.FC = () => {
                     },
                     body: JSON.stringify({
                         Email: email,
-                        Password: crypto.createHash('sha512').update(password, 'utf8').digest('hex'),
+                        Password: createHash('sha512').update(password, 'utf8').digest('hex'),
                     }),
                 }).then(response => response.json())
                     .then(async data => {
-                        // console.log(data);
-                        // console.log(data.length);
                         if (data.length === 0) {
-                            alert("Invalid user or password");
+                            InfoPopup("Invalid user or password");
                         } else {
                             sessionStorage.setItem("EmployeeId", data[0].EmployeeId);
                             sessionStorage.setItem("Name", data[0].Name);
                             sessionStorage.setItem("Level", data[0].Level);
                             sessionStorage.setItem("Email", data[0].Email);
                             send2FAemail();
-
-                            // await readCompanyInfo();
-                            // sessionStorage.setItem("akrapovik", "gintani");
-
-                            // await fetch(`/api/readCompanyInfo`, {
-                            //     method: 'GET',
-                            // }).then(response => response.json())
-                            //     .then(data => {
-                            //         data.forEach((element: any) => {
-                            //             companiesArray.push({ CompanyId: element.CompanyId, CompanyName: element.CompanyName })
-                            //         });
-                            //         sessionStorage.setItem("companiesArray", JSON.stringify(companiesArray));
-                            //     }).catch(error => console.log(error))
-
-                            // window.location.href = "/clients";
                         }
                     });
             } catch (error) {
@@ -121,14 +96,14 @@ const SignIn: React.FC = () => {
         }
     }
 
-    const checkSecurityCode = () => {
+    const checkSecurityCode = async () => {
         console.log(securityCodeFromInput);
         console.log(securityCodeGenerated);
         if (securityCodeFromInput !== securityCodeGenerated) {
-            alert("Invalid security code");
+            InfoPopup("Invalid security code");
             return;
         }
-        readCompanyInfo();
+        await readCompanyInfo();
         sessionStorage.setItem("akrapovik", "gintani");
         window.location.href = "/clients";
     }

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import * as crypto from 'crypto';
+import InfoPopup from '../common/InfoPopup';
 
 const SettingsContent = () => {
     const [newPassword, setNewPassword] = useState<string>("");
@@ -26,7 +27,7 @@ const SettingsContent = () => {
 
     const handleSubmit = async () => {
         if (newPassword !== confirmNewPassword) {
-            alert("Your passwords don’t match.");
+            InfoPopup("Your passwords don’t match.");
         } else {
             try {
                 const EmployeeId = sessionStorage.getItem("EmployeeId");

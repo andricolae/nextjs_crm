@@ -30,4 +30,8 @@ Import clients, companies, services from file
 
 UX - inform about request statuses
 
+email attach files
+
 routes cookies not sessionStorage
+
+company send email messages to which nr / email ? 

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import ModalClients from "@/components/common/ModalClients";
 import Loader from "../common/Loader";
 import useStore from "../common/StoreForSearch";
+import "./style.css";
+import ModalEmailSMS from "./ModalEmailSMS";
 
 type client = {
     ClientId: any,
@@ -68,9 +70,50 @@ const TableClients = () => {
 
     return (
         <div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-            <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
-                Clients
-            </h4>
+            <div className="flex w-full">
+                <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+                    Clients
+                </h4>
+
+                <div className="w-full flex flex-col items-end">
+                    <p>
+                        <label htmlFor="modalEmailSMS" className="btn" style={{ color: 'white', backgroundColor: '#007bff', margin: '3px' }}>
+                            <svg
+                                className="fill-current"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 22 22"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2094L2.64844 4.84692C2.68281 4.84692 2.71719 4.84692 2.75156 4.84692H19.2516ZM19.2516 17.1532H2.75156C2.40781 17.1532 2.13281 16.8782 2.13281 16.5344V6.35942L10.1766 11.5157C10.4172 11.6875 10.6922 11.7563 10.9672 11.7563C11.2422 11.7563 11.5172 11.6875 11.7578 11.5157L19.8016 6.35942V16.5688C19.8703 16.9125 19.5953 17.1532 19.2516 17.1532Z"
+                                    fill=""
+                                />
+                            </svg>
+                        </label>
+                        <label htmlFor="" className="btn" style={{ color: 'white', backgroundColor: '#007bff', margin: '3px' }}>
+                            <svg
+                                className="fill-current"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M12 3V15M12 3L8 7M12 3L16 7M4 20H20M4 20V16M20 20V16"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+                        </label>
+                        <ModalEmailSMS modalId="modalEmailSMS" filteredClients={filteredClients} />
+                    </p>
+                </div>
+            </div>
 
             <div className="flex flex-col">
                 <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-10">
@@ -96,7 +139,7 @@ const TableClients = () => {
                     </div>
                     <div className="hidden p-2.5 text-center sm:block xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base whitespace-nowrap">
-                            Company ID
+                            Company
                         </h5>
                     </div>
                     <div className="hidden p-2.5 text-center sm:block xl:p-5">

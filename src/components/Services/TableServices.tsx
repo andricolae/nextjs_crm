@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ModalServices from "@/components/common/ModalServices";
 import Loader from "../common/Loader";
 import useStore from "../common/StoreForSearch";
@@ -8,7 +8,7 @@ type service = {
     Id: any,
     Name: any,
     Description: any,
-    Price:any,
+    Price: any,
 }
 
 const TableServices = () => {
@@ -52,9 +52,33 @@ const TableServices = () => {
 
     return (
         <div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-            <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
-                Services
-            </h4>
+            <div className="flex w-full">
+                <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+                    Services
+                </h4>
+                <div className="w-full flex flex-col items-end">
+                    <p>
+                        <label htmlFor="" className="btn" style={{ color: 'white', backgroundColor: '#007bff' }}>
+                            <svg
+                                className="fill-current"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M12 3V15M12 3L8 7M12 3L16 7M4 20H20M4 20V16M20 20V16"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+                        </label>
+                    </p>
+                </div>
+            </div>
 
             <div className="flex flex-col">
                 <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-3">
