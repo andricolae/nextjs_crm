@@ -57,10 +57,10 @@ const SignIn: React.FC = () => {
                         if (data.length === 0) {
                             InfoPopup("Invalid user or password");
                         } else {
-                            sessionStorage.setItem("EmployeeId", data[0].EmployeeId);
-                            sessionStorage.setItem("Name", data[0].Name);
-                            sessionStorage.setItem("Level", data[0].Level);
-                            sessionStorage.setItem("Email", data[0].Email);
+                            sessionStorage.setItem("EmployeeId", data[0][0].EmployeeId);
+                            sessionStorage.setItem("Name", data[0][0].Name);
+                            sessionStorage.setItem("Level", data[0][0].Level);
+                            sessionStorage.setItem("Email", data[0][0].Email);
                             send2FAemail();
                         }
                     });
@@ -105,7 +105,7 @@ const SignIn: React.FC = () => {
         }
         await readCompanyInfo();
         sessionStorage.setItem("akrapovik", "gintani");
-        window.location.href = "/clients";
+        window.location.href = "/home";
     }
 
     const handleKeyDownSecurityCode = (event: React.KeyboardEvent<HTMLInputElement>) => {

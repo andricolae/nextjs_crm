@@ -1,6 +1,6 @@
-'use client';
+'use client'
 import { useEffect, useState } from "react";
-import ModalCompany from "./ModalCompany";
+import ModalCompany from "../CompanyInfo/ModalCompany";
 import Loader from "../common/Loader";
 import useStore from "../common/StoreForSearch";
 
@@ -19,13 +19,12 @@ type company = {
 }
 
 const TableCompanyInfo = () => {
-    const userPermissions = sessionStorage.getItem("Level");
     const [companies, setCompanies] = useState<company[]>([]);
     const [filteredCompany, setFilteredCompany] = useState<company[]>([]);
-    const searchTerm = useStore((state: any) => state.searchTerm);
-    const setSearchTerm = useStore((state: any) => state.setSearchTerm);
+    const searchTerm = useStore((state) => state.searchTerm);
+    const setSearchTerm = useStore((state) => state.setSearchTerm);
 
-    const getCompanies = async () => {
+    const getEmailSMSstatuses = async () => {
         let value = sessionStorage.getItem("akrapovik");
         if (value != "gintani") {
             window.location.href = "/";
@@ -41,11 +40,11 @@ const TableCompanyInfo = () => {
         } catch (error) {
             console.log(error);
         }
-    };
+    }
 
     useEffect(() => {
         setSearchTerm("");
-        getCompanies();
+        // getEmailSMSstatuses();
     }, []);
 
     useEffect(() => {
@@ -67,88 +66,30 @@ const TableCompanyInfo = () => {
 
     return (
         <div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-            <div className="flex w-full">
-                <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
-                    Companies
-                </h4>
-                {userPermissions === "admin" ? (
-                    <div className="w-full flex flex-col items-end">
-                        <p>
-                            <label htmlFor="" className="btn" style={{ color: 'white', backgroundColor: '#007bff' }}>
-                                <svg
-                                    className="fill-current"
-                                    width="22"
-                                    height="22"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12 3V15M12 3L8 7M12 3L16 7M4 20H20M4 20V16M20 20V16"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-                            </label>
-                        </p>
-                    </div>
-                ) : (
-                    <></>
-                )}
-            </div>
+            <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+                Emails and SMS sent
+            </h4>
 
             <div className="flex flex-col">
-                <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-10">
+                <div className="grid grid-cols-4 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-4">
                     <div className="p-2.5 xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Name
+                            First Name
                         </h5>
                     </div>
                     <div className="p-2.5 text-center xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            TVA
+                            Last Name
                         </h5>
                     </div>
                     <div className="p-2.5 text-center xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Shareholders
+                            Email
                         </h5>
                     </div>
                     <div className="hidden p-2.5 text-center sm:block xl:p-5">
                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            CIF
-                        </h5>
-                    </div>
-                    <div className="hidden p-2.5 text-center sm:block xl:p-5">
-                        <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            COM
-                        </h5>
-                    </div>
-                    <div className="hidden p-2.5 text-center sm:block xl:p-5">
-                        <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Headquarter
-                        </h5>
-                    </div>
-                    <div className="hidden p-2.5 text-center sm:block xl:p-5">
-                        <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Subsidiary
-                        </h5>
-                    </div>
-                    <div className="hidden p-2.5 text-center sm:block xl:p-5">
-                        <h5 className="text-sm font-medium uppercase xsm:text-base whitespace-nowrap">
-                            Main Activity
-                        </h5>
-                    </div>
-                    <div className="hidden p-2.5 text-center sm:block xl:p-5">
-                        <h5 className="text-sm font-medium uppercase xsm:text-base whitespace-nowrap">
-                            Second Activity
-                        </h5>
-                    </div>
-                    <div className="hidden p-2.5 text-center sm:block xl:p-5">
-                        <h5 className="text-sm font-medium uppercase xsm:text-base">
-                            Interests
+                            Phone
                         </h5>
                     </div>
                 </div>
@@ -202,13 +143,9 @@ const TableCompanyInfo = () => {
                                         <p className="text-meta-5">{company.Interests}</p>
                                     </div>
                                 </label>
-                                {userPermissions === "admin" ? (
-                                    <ModalCompany companyId={company.CompanyId} modalId={`my_modal_${key}`} companyName={company.CompanyName} TVA={company.TVA} shareholders={company.Shareholders}
-                                        CIF={company.CIF} COM={company.COM} headquarter={company.Headquarter} subsidiary={company.Subsidiary}
-                                        mainActivity={company.MainActivity} secondaryActivity={company.SecondaryActivity} interests={company.Interests} secondButton={false} />
-                                ) : (
-                                    <></>
-                                )}
+                                <ModalCompany companyId={company.CompanyId} modalId={`my_modal_${key}`} companyName={company.CompanyName} TVA={company.TVA} shareholders={company.Shareholders}
+                                    CIF={company.CIF} COM={company.COM} headquarter={company.Headquarter} subsidiary={company.Subsidiary}
+                                    mainActivity={company.MainActivity} secondaryActivity={company.SecondaryActivity} interests={company.Interests} secondButton={false} />
                             </div>
                         ))}
                     </div>

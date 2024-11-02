@@ -1,6 +1,6 @@
 'use client';
-import React, { useEffect, useState } from "react";
-import ModalClients from "@/components/common/ModalClients";
+import React, { useEffect, useState, useRef } from "react";
+import ModalClients from "@/components/Clients/ModalClients";
 import Loader from "../common/Loader";
 import useStore from "../common/StoreForSearch";
 import "./style.css";
@@ -21,10 +21,11 @@ type client = {
 }
 
 const TableClients = () => {
+    const userPermissions = sessionStorage.getItem("Level");
     const [clients, setClients] = useState<client[]>([]);
     const [filteredClients, setFilteredClients] = useState<client[]>([]);
-    const searchTerm = useStore((state) => state.searchTerm);
-    const setSearchTerm = useStore((state) => state.setSearchTerm);
+    const searchTerm = useStore((state: any) => state.searchTerm);
+    const setSearchTerm = useStore((state: any) => state.setSearchTerm);
     const [companiesArray, setCompaniesArray] = useState<{ CompanyId: string, CompanyName: string }[]>(JSON.parse(sessionStorage.getItem("companiesArray") || "[]"));
 
     const getClients = async () => {
@@ -68,6 +69,20 @@ const TableClients = () => {
         setFilteredClients(filtered);
     }, [searchTerm, clients]);
 
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    const handleButtonClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files.length > 0) {
+            const file = event.target.files[0];
+            console.log("Selected file:", file);
+        }
+    };
+
+
     return (
         <div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             <div className="flex w-full">
@@ -92,25 +107,36 @@ const TableClients = () => {
                                 />
                             </svg>
                         </label>
-                        <label htmlFor="" className="btn" style={{ color: 'white', backgroundColor: '#007bff', margin: '3px' }}>
-                            <svg
-                                className="fill-current"
-                                width="22"
-                                height="22"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    d="M12 3V15M12 3L8 7M12 3L16 7M4 20H20M4 20V16M20 20V16"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
-                        </label>
                         <ModalEmailSMS modalId="modalEmailSMS" filteredClients={filteredClients} />
+                        {userPermissions === "admin" ? (
+                            <button className="btn" style={{ color: 'white', backgroundColor: '#007bff', margin: '3px' }} onClick={handleButtonClick}>
+                                <svg
+                                    className="fill-current"
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M12 3V15M12 3L8 7M12 3L16 7M4 20H20M4 20V16M20 20V16"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    style={{ display: 'none' }}
+                                    accept=".txt, .csv"
+                                    onChange={handleFileChange}
+                                />
+                            </button>
+                        ) : (
+                            <></>
+                        )}
                     </p>
                 </div>
             </div>
@@ -216,8 +242,12 @@ const TableClients = () => {
                                         <p className="text-meta-5">{client.Interests}</p>
                                     </div>
                                 </label>
-                                <ModalClients clientId={client.ClientId} modalId={`my_modal_${key}`} firstName={client.FirstName} lastName={client.LastName} CI={client.CI} CNP={client.CNP} companyId={client.CompanyId}
-                                    companyRole={client.CompanyRole} address={client.Address} email={client.Email} phone={client.Phone} interests={client.Interests} secondButton={false} />
+                                {userPermissions === "admin" ? (
+                                    <ModalClients clientId={client.ClientId} modalId={`my_modal_${key}`} firstName={client.FirstName} lastName={client.LastName} CI={client.CI} CNP={client.CNP} companyId={client.CompanyId}
+                                        companyRole={client.CompanyRole} address={client.Address} email={client.Email} phone={client.Phone} interests={client.Interests} secondButton={false} />
+                                ) : (
+                                    <></>
+                                )}
                             </div>
                         ))}
                     </div>

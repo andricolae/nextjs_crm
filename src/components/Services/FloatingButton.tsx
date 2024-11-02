@@ -1,14 +1,22 @@
+'use client';
 import React from 'react';
 import "./style.css";
-import ModalServices from '../common/ModalServices';
+import ModalServices from './ModalServices';
 
 const FloatingButton = () => {
+    const userPermissions = sessionStorage.getItem("Level");
     return (
         <>
-            <label htmlFor="modalServiceFloatingButton" className="floating-button">
-                +
-            </label>
-            <ModalServices modalId="modalServiceFloatingButton" Name={""} Description={""} Price={""} secondButton={true} />
+            {userPermissions === "admin" ? (
+                <>
+                    <label htmlFor="modalServiceFloatingButton" className="floating-button">
+                        +
+                    </label>
+                    <ModalServices modalId="modalServiceFloatingButton" Name={""} Description={""} Price={""} secondButton={true} />
+                </>
+            ) : (
+                <></>
+            )}
         </>
     );
 };

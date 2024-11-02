@@ -2,6 +2,7 @@ POSTPONE
 *************************************
 UI input fields at table update & add
 UI table views
+UX - inform about request statuses
 *************************************
 
 555555555555555555555555555555555
@@ -26,12 +27,15 @@ GDPR
 
 Cpanel login
 
-Import clients, companies, services from file
+company send email messages to which nr / email ? 
 
-UX - inform about request statuses
+Import clients, companies from file
 
 email attach files
 
 routes cookies not sessionStorage
+user admin sessionStorage
 
-company send email messages to which nr / email ? 
+add update delete !!!window.location.reload();
+
+logout btn
