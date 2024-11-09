@@ -5,6 +5,7 @@ import Loader from "../common/Loader";
 import useStore from "../common/StoreForSearch";
 import "./style.css";
 import ModalEmailSMS from "./ModalEmailSMS";
+import { createHash } from 'crypto';
 
 type client = {
     ClientId: any,
@@ -29,10 +30,6 @@ const TableClients = () => {
     const [companiesArray, setCompaniesArray] = useState<{ CompanyId: string, CompanyName: string }[]>(JSON.parse(sessionStorage.getItem("companiesArray") || "[]"));
 
     const getClients = async () => {
-        let value = sessionStorage.getItem("akrapovik");
-        if (value != "gintani") {
-            window.location.href = "/";
-        }
         try {
             await fetch(`/api/readClient`, {
                 method: 'GET',
@@ -82,7 +79,6 @@ const TableClients = () => {
         }
     };
 
-
     return (
         <div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             <div className="flex w-full">
@@ -108,7 +104,7 @@ const TableClients = () => {
                             </svg>
                         </label>
                         <ModalEmailSMS modalId="modalEmailSMS" filteredClients={filteredClients} />
-                        {userPermissions === "admin" ? (
+                        {userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
                             <button className="btn" style={{ color: 'white', backgroundColor: '#007bff', margin: '3px' }} onClick={handleButtonClick}>
                                 <svg
                                     className="fill-current"
@@ -242,7 +238,7 @@ const TableClients = () => {
                                         <p className="text-meta-5">{client.Interests}</p>
                                     </div>
                                 </label>
-                                {userPermissions === "admin" ? (
+                                {userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
                                     <ModalClients clientId={client.ClientId} modalId={`my_modal_${key}`} firstName={client.FirstName} lastName={client.LastName} CI={client.CI} CNP={client.CNP} companyId={client.CompanyId}
                                         companyRole={client.CompanyRole} address={client.Address} email={client.Email} phone={client.Phone} interests={client.Interests} secondButton={false} />
                                 ) : (

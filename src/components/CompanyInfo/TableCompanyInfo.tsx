@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ModalCompany from "./ModalCompany";
 import Loader from "../common/Loader";
 import useStore from "../common/StoreForSearch";
+import { createHash } from 'crypto';
 
 type company = {
     CompanyId: any,
@@ -26,10 +27,6 @@ const TableCompanyInfo = () => {
     const setSearchTerm = useStore((state: any) => state.setSearchTerm);
 
     const getCompanies = async () => {
-        let value = sessionStorage.getItem("akrapovik");
-        if (value != "gintani") {
-            window.location.href = "/";
-        }
         try {
             await fetch(`/api/readCompanyInfo`, {
                 method: 'GET',
@@ -71,7 +68,7 @@ const TableCompanyInfo = () => {
                 <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
                     Companies
                 </h4>
-                {userPermissions === "admin" ? (
+                {userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
                     <div className="w-full flex flex-col items-end">
                         <p>
                             <label htmlFor="" className="btn" style={{ color: 'white', backgroundColor: '#007bff' }}>
@@ -202,7 +199,7 @@ const TableCompanyInfo = () => {
                                         <p className="text-meta-5">{company.Interests}</p>
                                     </div>
                                 </label>
-                                {userPermissions === "admin" ? (
+                                {userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
                                     <ModalCompany companyId={company.CompanyId} modalId={`my_modal_${key}`} companyName={company.CompanyName} TVA={company.TVA} shareholders={company.Shareholders}
                                         CIF={company.CIF} COM={company.COM} headquarter={company.Headquarter} subsidiary={company.Subsidiary}
                                         mainActivity={company.MainActivity} secondaryActivity={company.SecondaryActivity} interests={company.Interests} secondButton={false} />

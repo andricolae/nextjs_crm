@@ -25,10 +25,6 @@ const TableCompanyInfo = () => {
     const setSearchTerm = useStore((state) => state.setSearchTerm);
 
     const getEmailSMSstatuses = async () => {
-        let value = sessionStorage.getItem("akrapovik");
-        if (value != "gintani") {
-            window.location.href = "/";
-        }
         try {
             await fetch(`/api/readCompanyInfo`, {
                 method: 'GET',

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ModalServices from "@/components/Services/ModalServices";
 import Loader from "../common/Loader";
 import useStore from "../common/StoreForSearch";
+import { createHash } from 'crypto';
 
 type service = {
     Id: any,
@@ -19,10 +20,6 @@ const TableServices = () => {
     const userPermissions = sessionStorage.getItem("Level");
 
     const getServices = async () => {
-        let value = sessionStorage.getItem("akrapovik");
-        if (value != "gintani") {
-            window.location.href = "/";
-        }
         try {
             await fetch('api/readService', {
                 method: 'GET',
@@ -99,7 +96,7 @@ const TableServices = () => {
                                     </div>
 
                                 </label>
-                                {userPermissions === "admin" ? (
+                                {userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
                                     <ModalServices Id={service.Id} modalId={`my_modal_${key}`} name={service.Name} description={service.Description} price={service.Price} secondButton={false} />
                                 ) : (
                                     <></>

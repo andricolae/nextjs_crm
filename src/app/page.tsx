@@ -39,6 +39,7 @@ const SignIn: React.FC = () => {
     }
 
     const login = async () => {
+        const sessionID = getSessionID();
         if (email === "" || password === "") {
             InfoPopup("Type email and password.")
         } else {
@@ -51,6 +52,7 @@ const SignIn: React.FC = () => {
                     body: JSON.stringify({
                         Email: email,
                         Password: createHash('sha512').update(password, 'utf8').digest('hex'),
+                        SessionID: sessionID,
                     }),
                 }).then(response => response.json())
                     .then(async data => {
@@ -59,7 +61,8 @@ const SignIn: React.FC = () => {
                         } else {
                             sessionStorage.setItem("EmployeeId", data[0][0].EmployeeId);
                             sessionStorage.setItem("Name", data[0][0].Name);
-                            sessionStorage.setItem("Level", data[0][0].Level);
+                            sessionStorage.setItem("Level", createHash('sha512').update(data[0][0].Level, 'utf8').digest('hex'));
+                            sessionStorage.setItem("Level2", data[0][0].Level);
                             sessionStorage.setItem("Email", data[0][0].Email);
                             send2FAemail();
                         }
@@ -68,6 +71,17 @@ const SignIn: React.FC = () => {
                 console.error(error);
             }
         }
+    }
+
+    const getSessionID = () => {
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'sessionId') {
+                return createHash('sha512').update(value, 'utf8').digest('hex');
+            }
+        }
+        return createHash('sha512').update("akrapovic", 'utf8').digest('hex');
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -104,7 +118,7 @@ const SignIn: React.FC = () => {
             return;
         }
         await readCompanyInfo();
-        sessionStorage.setItem("akrapovik", "gintani");
+        // sessionStorage.setItem("akrapovik", "gintani");
         window.location.href = "/home";
     }
 

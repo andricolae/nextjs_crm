@@ -6,11 +6,23 @@ import ClickOutside from "@/components/ClickOutside";
 const DropdownUser = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const name = sessionStorage.getItem("Name");
-    const level = sessionStorage.getItem("Level");
+    const level = sessionStorage.getItem("Level2");
 
     const logout = async () => {
-        window.location.href="/";
-        sessionStorage.setItem("akrapovik", "");
+        // window.location.href="/";
+        // sessionStorage.setItem("akrapovik", "");
+
+        try {
+            await fetch(`/api/logout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(response => response.json());
+            window.location.href="/";
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (

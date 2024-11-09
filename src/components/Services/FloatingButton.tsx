@@ -2,12 +2,13 @@
 import React from 'react';
 import "./style.css";
 import ModalServices from './ModalServices';
+import { createHash } from 'crypto';
 
 const FloatingButton = () => {
     const userPermissions = sessionStorage.getItem("Level");
     return (
         <>
-            {userPermissions === "admin" ? (
+            {userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
                 <>
                     <label htmlFor="modalServiceFloatingButton" className="floating-button">
                         +
