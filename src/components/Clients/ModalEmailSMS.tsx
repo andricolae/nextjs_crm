@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Loader from '../common/Loader';
 import InfoPopup from '../common/InfoPopup';
+import ModalPDF from './ModalPDF';
 
 const ModalEmailSMS = (props: any) => {
     const [subject, setSubject] = useState<string>("Subject");
@@ -28,6 +29,14 @@ const ModalEmailSMS = (props: any) => {
             InfoPopup("Select clients to send emails");
             return;
         }
+        if (subject === "") {
+            InfoPopup("Type subject");
+            return;
+        }
+        if (composedEmailSMS === "") {
+            InfoPopup("Compose email");
+            return;
+        }
         for (let i = 0; i < emailAddressesToSendEmailArray.length; ++i) {
             try {
                 const response = await fetch(`/api/sendEmail/${emailAddressesToSendEmailArray[i]}`, {
@@ -49,12 +58,16 @@ const ModalEmailSMS = (props: any) => {
                 InfoPopup(`Failed to send email to ${emailAddressesToSendEmailArray[i]}`);
             }
         }
-        InfoPopup("Finished to send emails");
+        InfoPopup("Emails sent");
     }
 
     const sendSMSs = async () => {
         if (phoneNumbersToSendSMSArray.length === 0) {
             InfoPopup("Select clients to send SMS");
+            return;
+        }
+        if (composedEmailSMS === "") {
+            InfoPopup("Compose SMS");
             return;
         }
         for (let i = 0; i < phoneNumbersToSendSMSArray.length; ++i) {
@@ -64,8 +77,8 @@ const ModalEmailSMS = (props: any) => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ 
-                        to: phoneNumbersToSendSMSArray[i], 
+                    body: JSON.stringify({
+                        to: phoneNumbersToSendSMSArray[i],
                         message: composedEmailSMS,
                     }),
                 });
@@ -80,7 +93,7 @@ const ModalEmailSMS = (props: any) => {
                 InfoPopup(`Failed to send SMS to ${phoneNumbersToSendSMSArray[i]}`);
             }
         }
-        // InfoPopup("Finished to send SMS");
+        InfoPopup("Finished to send SMS");
     }
 
     return (
@@ -152,7 +165,29 @@ const ModalEmailSMS = (props: any) => {
                         </div>
                     </div>
 
-                    <div className="modal-action">
+                    <div className="modal-action w-full">
+                        <label 
+                            className="btn"
+                            htmlFor="modalPDF"
+                            style={{ color: 'white', backgroundColor: '#007bff', padding: '10px 20px', margin: '0.5rem' }}
+                        >
+                            <svg
+                                className="fill-current"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M21.44 11.05L12.36 20.12C10.58 21.91 7.84 21.91 6.05 20.12C4.27 18.34 4.27 15.6 6.05 13.81L15.14 4.74C16.32 3.56 18.22 3.56 19.4 4.74C20.59 5.92 20.59 7.82 19.4 9.01L10.31 18.07C9.72 18.66 8.76 18.66 8.17 18.07C7.58 17.48 7.58 16.52 8.17 15.93L16.57 7.54"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    fill="none"
+                                />
+                            </svg>
+                        </label>
+                        <ModalPDF modalId="modalPDF" />
                         <button className="btn"
                             style={{ color: 'white', backgroundColor: '#007bff', padding: '10px 20px', margin: '0.5rem' }}
                             onClick={sendEmails}
@@ -194,9 +229,6 @@ const ModalEmailSMS = (props: any) => {
                                 <line x1="7" y1="15" x2="17" y2="15" stroke="currentColor" strokeWidth="1.5" />
                             </svg>
                         </button>
-
-                        {/* <label htmlFor={props.modalId} className="btn btn-info text-white" onClick={props.secondButton === false ? saveClientChanges : addClient}>Save</label>
-                        <button className="btn btn-outline btn-error" onClick={deleteClient} disabled={props.secondButton} style={{ display: props.secondButton ? "none" : "inline-block" }}>Delete</button> */}
                     </div>
                 </div>
             </div>

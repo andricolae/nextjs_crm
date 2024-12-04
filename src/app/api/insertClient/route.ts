@@ -9,12 +9,12 @@ export async function POST(req: Request) {
     }
 
     try {
-        const [result]: any = await pool.query(
+        const result: any = await pool.query(
             'INSERT INTO Client (FirstName, LastName, CI, CNP, CompanyId, CompanyRole, Address, Email, Phone, Interests) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [FirstName, LastName, CI, CNP, CompanyId, CompanyRole, Address, Email, Phone, Interests]
         );
 
-        if (result.affectedRows === 0) {
+        if (result[0].length === 0) {
             return NextResponse.json({ message: 'Failed to insert company info' }, { status: 500 });
         }
 

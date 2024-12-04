@@ -13,8 +13,7 @@ home dashboard (key metrics -> numar de mesaje trimise si numar de mailuri trimi
 777777777777777777777777777777777777777777777777777777777
 *********************************************************
 user/admin permissions
-admin can -> crud on tables/ update email & sms templates
-users can -> send emails & sms
+admin can -> update email & sms templates
 *********************************************************
 
 #########################################################
@@ -24,18 +23,16 @@ SHA2('your_password',512)
 *************************
 
 GDPR
-
 Cpanel login
 
-company send email messages to which nr / email ? 
+email attach files       modal % reducere / text area
+
+emails sms statuses
+
+company send email messages to which nr / email ?
+
+twilio configure for sms
 
 Import clients, companies from file
 
-email attach files
-
-routes cookies not sessionStorage
-user admin sessionStorage
-
 add update delete !!!window.location.reload();
-
-logout btn

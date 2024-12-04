@@ -9,9 +9,9 @@ export async function DELETE(request: Request, { params }: { params: { Id: strin
             return NextResponse.json({ message: 'Service ID is required' }, { status: 400 });
         }
 
-        const [result]: any = await pool.query('DELETE FROM Service WHERE Id = ?', [Id]);
+        const result: any = await pool.query('DELETE FROM Service WHERE Id = ?', [Id]);
 
-        if (result.affectedRows === 0) {
+        if (result[0].length === 0) {
             return NextResponse.json({ message: 'Service not found' }, { status: 404 });
         }
 

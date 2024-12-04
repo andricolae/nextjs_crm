@@ -10,12 +10,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
         }
 
-        const [result]: any = await pool.query(
+        const result: any = await pool.query(
             'INSERT INTO CompanyInfo (CompanyName, TVA, Shareholders, CIF, COM, Headquarter, Subsidiary, MainActivity, SecondaryActivity, Interests) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [CompanyName, TVA, Shareholders, CIF, COM, Headquarter, Subsidiary, MainActivity, SecondaryActivity, Interests]
         );
 
-        if (result.affectedRows === 0) {
+        if (result[0].length === 0) {
             return NextResponse.json({ message: 'Failed to insert company info' }, { status: 500 });
         }
 

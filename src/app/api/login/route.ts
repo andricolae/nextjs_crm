@@ -17,8 +17,6 @@ export async function PUT(request: Request) {
             [Email, Password]
         );
 
-        // console.log(result);
-
         if (result[0].length === 0) {
             return new Response(JSON.stringify({ message: 'User not found' }), {
                 status: 404,

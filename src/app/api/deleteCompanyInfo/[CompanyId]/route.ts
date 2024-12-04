@@ -9,9 +9,9 @@ export async function DELETE(request: Request, { params }: { params: { CompanyId
             return NextResponse.json({ message: 'CompanyInfo ID is required' }, { status: 400 });
         }
 
-        const [result]: any = await pool.query('DELETE FROM CompanyInfo WHERE CompanyId = ?', [CompanyId]);
+        const result: any = await pool.query('DELETE FROM CompanyInfo WHERE CompanyId = ?', [CompanyId]);
 
-        if (result.affectedRows === 0) {
+        if (result[0].length === 0) {
             return NextResponse.json({ message: 'CompanyInfo not found' }, { status: 404 });
         }
 

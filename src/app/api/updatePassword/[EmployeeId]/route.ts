@@ -14,12 +14,12 @@ export async function PUT(req: Request, { params }: { params: { EmployeeId: stri
     }
 
     try {
-        const [result]: any = await pool.query(
+        const result: any = await pool.query(
             'UPDATE Employee SET Password = ? WHERE EmployeeId = ?',
             [Password, EmployeeId]
         );
 
-        if (result.affectedRows === 0) {
+        if (result[0].length === 0) {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }
 

@@ -14,12 +14,12 @@ export async function PUT(req: Request, { params }: { params: { ClientId: string
     }
 
     try {
-        const [result]: any = await pool.query(
+        const result: any = await pool.query(
             'UPDATE Client SET FirstName = ?, LastName = ?, CI = ?, CNP = ?, CompanyId = ?, CompanyRole = ?, Address = ?, Email = ?, Phone = ?, Interests = ? WHERE ClientId = ?',
             [FirstName, LastName, CI, CNP, CompanyId, CompanyRole, Address, Email, Phone, Interests, ClientId]
         );
 
-        if (result.affectedRows === 0) {
+        if (result[0].length === 0) {
             return NextResponse.json({ message: 'Client not found' }, { status: 404 });
         }
 

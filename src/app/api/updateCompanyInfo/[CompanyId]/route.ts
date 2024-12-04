@@ -14,12 +14,12 @@ export async function PUT(req: Request, { params }: { params: { CompanyId: strin
     }
 
     try {
-        const [result]: any = await pool.query(
+        const result: any = await pool.query(
             'UPDATE CompanyInfo SET CompanyName = ?, TVA = ?, Shareholders = ?, CIF = ?, COM = ?, Headquarter = ?, Subsidiary = ?, MainActivity = ?, SecondaryActivity = ?, Interests = ? WHERE CompanyId = ?',
             [CompanyName, TVA, Shareholders, CIF, COM, Headquarter, Subsidiary, MainActivity, SecondaryActivity, Interests, CompanyId]
         );
 
-        if (result.affectedRows === 0) {
+        if (result[0].length === 0) {
             return NextResponse.json({ message: 'Company info not found' }, { status: 404 });
         }
 

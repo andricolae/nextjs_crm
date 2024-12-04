@@ -14,12 +14,12 @@ export async function PUT(req: Request, { params }: { params: { Id: string } }) 
     }
 
     try {
-        const [result]: any = await pool.query(
+        const result: any = await pool.query(
             'UPDATE Service SET Name = ?, Description = ?, Price = ? WHERE Id = ?',
             [Name, Description, Price, Id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result[0].length === 0) {
             return NextResponse.json({ message: 'Service not found' }, { status: 404 });
         }
 
