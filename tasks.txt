@@ -27,12 +27,16 @@ Cpanel login
 
 email attach files       modal % reducere / text area
 
+save PDF on PC
+
+inform user about send email status bug
+
+Import clients, companies from file
+
 emails sms statuses
 
 company send email messages to which nr / email ?
 
 twilio configure for sms
-
-Import clients, companies from file
 
 add update delete !!!window.location.reload();

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Loader from '../common/Loader';
+import GeneratePDF from './GeneratePDF';
+import InfoPopup from '../common/InfoPopup';
 
 type service = {
 	Id: any,
@@ -10,7 +12,7 @@ type service = {
 
 const ModalPDF = (props: any) => {
 	const [services, setServices] = useState<service[]>([]);
-	const [offerServicesArray, setServicesArray] = useState<string[]>([]);
+	const [offerServicesArray, setOfferServicesArray] = useState<string[]>([]);
 	const [discountPercent, setDiscountPercent] = useState<string>("");
 	const [offerDescription, setOfferDescription] = useState<string>("");
 
@@ -33,19 +35,32 @@ const ModalPDF = (props: any) => {
 	}, []);
 
 	const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, service: string) => {
+
 		if (event.target.checked) {
-			setServicesArray(prevArray => [...prevArray, service]);
+			setOfferServicesArray(prevArray => [...prevArray, service]);
 		} else {
-			setServicesArray(prevArray =>
+			setOfferServicesArray(prevArray =>
 				prevArray.filter(services => services !== service)
 			);
 		}
 	}
 
+	const createPDF = () => {
+		if (offerServicesArray.length === 0 || discountPercent === "" || offerDescription === "") {
+			InfoPopup("Configure the PDF");
+			return;
+		}
+		GeneratePDF();
+		const modalInput = document.getElementById(props.modalId) as HTMLInputElement;
+		modalInput.checked = false;
+
+		props.handleDataFromChild(offerServicesArray, discountPercent, offerDescription);
+	}
+
 	return (
 		<>
 			<input type="checkbox" id={props.modalId} className="modal-toggle hidden" />
-			<div className="modal h-full w-[98.4%] flex justify-center items-center">
+			<div className="modal max-h-full w-[98.4%] flex justify-center items-center">
 				<div className="modal-box w-[100%] h-[100%] max-w-full overflow-hidden relative">
 					<label htmlFor={props.modalId} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
 						X
@@ -116,10 +131,14 @@ const ModalPDF = (props: any) => {
 							<textarea className="textarea textarea-bordered h-[65%] w-full mt-5" placeholder="Offer description..."
 								onChange={e => setOfferDescription(e.target.value)} />
 
-							<button className="btn"
+							<button
+								// htmlFor={props.modalId} 
+								className="btn"
 								style={{ color: 'white', backgroundColor: '#007bff', padding: '10px 20px', margin: '0.5rem' }}
-							// onClick={sendSMSs}
-							>Attach PDF</button>
+								onClick={createPDF}>
+								Attach PDF
+							</button>
+
 						</div>
 					</div>
 				</div>
