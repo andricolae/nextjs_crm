@@ -1,7 +1,6 @@
 import { jsPDF } from "jspdf";
 import 'jspdf-autotable';
 
-
 function GeneratePDF(): Blob {
 	const doc = new jsPDF();
 

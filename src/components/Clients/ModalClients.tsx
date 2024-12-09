@@ -149,7 +149,7 @@ const ModalClients = (props: any) => {
 					<div className="modal-action">
 						<label htmlFor={props.modalId} className="btn btn-info text-white" onClick={props.secondButton === false ? saveClientChanges : addClient}>Save</label>
 						<button className="btn btn-outline btn-error"
-							// onClick={deleteClient} 
+							onClick={deleteClient}
 							disabled={props.secondButton} style={{ display: props.secondButton ? "none" : "inline-block" }}>Delete</button>
 					</div>
 				</div>

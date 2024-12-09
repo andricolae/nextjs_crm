@@ -27,11 +27,11 @@ Cpanel login
 
 email attach files       modal % reducere / text area
 
-save PDF on PC
+save PDF on PC 
 
 inform user about send email status bug
 
-Import clients, companies from file
+Import clients, companies from file ////////// infrom user about import status
 
 emails sms statuses
 
