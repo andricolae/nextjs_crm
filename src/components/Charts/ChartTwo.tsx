@@ -78,11 +78,15 @@ interface ChartTwoState {
 const ChartTwo: React.FC = () => {
     const series = [
         {
-            name: "Sales",
+            name: "Client SMS",
             data: [44, 55, 41, 67, 22, 43, 65],
         },
         {
-            name: "Revenue",
+            name: "Client Email",
+            data: [13, 23, 20, 8, 13, 27, 15],
+        },
+        {
+            name: "Company Email",
             data: [13, 23, 20, 8, 13, 27, 15],
         },
     ];
@@ -92,12 +96,12 @@ const ChartTwo: React.FC = () => {
             <div className="mb-4 justify-between gap-4 sm:flex">
                 <div>
                     <h4 className="text-xl font-semibold text-black dark:text-white">
-                        Bare
+                        Daily Activity
                     </h4>
                 </div>
                 <div>
                     <div className="relative z-20 inline-block">
-                        <select
+                        {/* <select
                             name="#"
                             id="#"
                             className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
@@ -128,7 +132,7 @@ const ChartTwo: React.FC = () => {
                                     fill="#637381"
                                 />
                             </svg>
-                        </span>
+                        </span> */}
                     </div>
                 </div>
             </div>
