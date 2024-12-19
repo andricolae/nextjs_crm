@@ -2,42 +2,40 @@
 import React, { useState } from "react";
 import Loader from "@/components/common/Loader";
 import InfoPopup from "@/components/common/InfoPopup";
-import ModalPDF from "@/components/Clients/ModalPDF";
+// import ModalPDF from "@/components/CompanyInfo/ModalPDF";
 import { AssistantsV1ServiceCreateFeedbackRequest } from "twilio/lib/rest/assistants/v1/assistant/feedback";
 
-type clientModal = {
+type companyModal = {
 	FirstName: string,
 	LastName: string,
 	Email: string,
-	Phone: string,
 }
 
-const ModalEmailSMS = (props: any) => {
+const ModalEmail = (props: any) => {
 	const [subject, setSubject] = useState<string>("Subject");
 	const [composedEmailSMS, setComposedEmailSMS] = useState<string>("EMAIL FOR TEST");
-	const [clientsArrayForEmailsSMSs, setClientsArrayForEmailsSMSs] = useState<clientModal[]>([]);
+	const [emailAddressesToSendEmailArray, setEmailAddressesToSendEmailArray] = useState<companyModal[]>([]);
 	const [offerServicesArray, setOfferServicesArray] = useState<string[]>([]);
 	const [discountPercent, setDiscountPercent] = useState<string>("");
 	const [offerDescription, setOfferDescription] = useState<string>("");
 
-	const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, firstName: string, lastName: string, email: string, phoneNr: string) => {
-		let clientForEmailSMS = {
-			FirstName: firstName,
-			LastName: lastName,
+	const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, companyName: string, email: string) => {
+		let companyForEmail = {
+			FirstName: companyName,
+			LastName: "$",
 			Email: email,
-			Phone: phoneNr,
 		}
 		if (event.target.checked) {
-			setClientsArrayForEmailsSMSs(prevArray => [...prevArray, clientForEmailSMS]);
+			setEmailAddressesToSendEmailArray(prevArray => [...prevArray, companyForEmail]);
 		} else {
-			setClientsArrayForEmailsSMSs(prevArray =>
-				prevArray.filter(client => client !== clientForEmailSMS)
+			setEmailAddressesToSendEmailArray(prevArray =>
+				prevArray.filter(company => company !== companyForEmail)
 			);
 		}
 	}
 
 	const sendEmails = async () => {
-		if (setClientsArrayForEmailsSMSs.length === 0) {
+		if (emailAddressesToSendEmailArray.length === 0) {
 			InfoPopup("Select clients to send emails");
 			return;
 		}
@@ -49,10 +47,10 @@ const ModalEmailSMS = (props: any) => {
 			InfoPopup("Compose email");
 			return;
 		}
-		for (let i = 0; i < setClientsArrayForEmailsSMSs.length; ++i) {
+		for (let i = 0; i < emailAddressesToSendEmailArray.length; ++i) {
 
 			try {
-				const response = await fetch(`/api/sendEmail/${clientsArrayForEmailsSMSs[i].Email}`, {
+				const response = await fetch(`/api/sendEmail/${emailAddressesToSendEmailArray[i].Email}`, {
 					method: "PUT",
 					headers: {
 						"Content-Type": "application/json",
@@ -67,9 +65,8 @@ const ModalEmailSMS = (props: any) => {
 						}
 					),
 				});
-
 				if (!response.ok) {
-					InfoPopup(`Failed to send email to ${clientsArrayForEmailsSMSs[i].Email}`);
+					InfoPopup(`Failed to send email to ${emailAddressesToSendEmailArray[i].Email}`);
 					throw new Error(`HTTP error! Status: ${response.status}`);
 				}
 
@@ -79,80 +76,24 @@ const ModalEmailSMS = (props: any) => {
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({
-						firstName: clientsArrayForEmailsSMSs[i].FirstName,
-						lastName: clientsArrayForEmailsSMSs[i].LastName,
+						firstName: emailAddressesToSendEmailArray[i].FirstName,
+						lastName: emailAddressesToSendEmailArray[i].LastName,
 						clientSMS: 0,
-						clientEmail: 1,
-						companyEmail: 0,
+						clientEmail: 0,
+						companyEmail: 1,
 					}),
 				});
-
 				const data2 = await res2.json();
 				if (!data2.success) {
-					InfoPopup(`Failed to add sent Email to ${clientsArrayForEmailsSMSs[i].Email} in database`);
+					InfoPopup(`Failed to add sent Email to ${emailAddressesToSendEmailArray[i].Email} in database`);
 					throw new Error(`HTTP error! Status: ${data2.error}`);
 				}
 			} catch (error) {
 				console.error(error);
-				InfoPopup(`Failed to send email to ${clientsArrayForEmailsSMSs[i].Email}`);
+				InfoPopup(`Failed to send email to ${emailAddressesToSendEmailArray[i].Email}`);
 			}
 		}
 		InfoPopup("Emails sent");
-	}
-
-	const sendSMSs = async () => {
-		if (clientsArrayForEmailsSMSs.length === 0) {
-			InfoPopup("Select clients to send SMS");
-			return;
-		}
-		if (composedEmailSMS === "") {
-			InfoPopup("Compose SMS");
-			return;
-		}
-		for (let i = 0; i < clientsArrayForEmailsSMSs.length; ++i) {
-			try {
-				const res = await fetch("/api/sendSMS", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						to: clientsArrayForEmailsSMSs[i].Phone,
-						message: composedEmailSMS,
-					}),
-				});
-
-				const data = await res.json();
-				if (!data.success) {
-					InfoPopup(`Failed to send SMS to ${clientsArrayForEmailsSMSs[i].Phone}`);
-					throw new Error(`HTTP error! Status: ${data.error}`);
-				}
-
-				const res2 = await fetch("/api/insertUpdateSmsEmailStatuses", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						firstName: clientsArrayForEmailsSMSs[i].FirstName,
-						lastName: clientsArrayForEmailsSMSs[i].LastName,
-						clientSMS: 1,
-						clientEmail: 0,
-						companyEmail: 0,
-					}),
-				});
-
-				const data2 = await res2.json();
-				if (!data2.success) {
-					InfoPopup(`Failed to add sent SMS to ${clientsArrayForEmailsSMSs[i].Phone} in database`);
-					throw new Error(`HTTP error! Status: ${data.error}`);
-				}
-			} catch (error) {
-				console.log(`Error: ${error}`);
-				InfoPopup(`Failed to send SMS to ${clientsArrayForEmailsSMSs[i].Phone}`);
-			}
-		}
-		InfoPopup("Finished to send SMS");
 	}
 
 	const handleDataFromChild = (offerServicesArray: string[], discountPercent: string, offerDescription: string) => {
@@ -173,15 +114,11 @@ const ModalEmailSMS = (props: any) => {
 						<textarea placeholder="Compose email or SMS" value={composedEmailSMS} className="flex h-29 items-center justify-center p-2 text-black border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-500" onChange={(e) => setComposedEmailSMS(e.target.value)} />
 
 						<div className="flex flex-col">
-							<div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-4">
-								<div className="p-2.5 xl:p-5">
-									<h5 className="text-sm font-medium uppercase xsm:text-base">
-										First Name
-									</h5>
-								</div>
+
+							<div className="grid grid-cols-2 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-2">
 								<div className="p-2.5 text-center xl:p-5">
 									<h5 className="text-sm font-medium uppercase xsm:text-base">
-										Last Name
+										Company Name
 									</h5>
 								</div>
 								<div className="p-2.5 text-center xl:p-5">
@@ -189,35 +126,23 @@ const ModalEmailSMS = (props: any) => {
 										Email
 									</h5>
 								</div>
-								<div className="p-2.5 text-center xl:p-5">
-									<h5 className="text-sm font-medium uppercase xsm:text-base">
-										Phone
-									</h5>
-								</div>
 							</div>
 
-							{props.filteredClients?.length > 0 ? (
+							{props.filteredCompanies?.length > 0 ? (
 								<div>
-									{props.filteredClients.map((client: any, key: any) => (
+									{props.filteredCompanies.map((company: any, key: any) => (
 										<div key={key}>
-											<div className={`grid grid-cols-3 sm:grid-cols-4 ${key === props.filteredClients.length - 1 ? "" : "border-b border-stroke dark:border-strokedark"}`}>
+											<div className={`grid grid-cols-2 sm:grid-cols-2 ${key === props.filteredCompanies.length - 1 ? "" : "border-b border-stroke dark:border-strokedark"}`}>
+
 												<div className="flex items-center gap-3 p-2.5 xl:p-5">
 													<p className="hidden text-black dark:text-white sm:block">
-														<input type="checkbox" className="checkbox checkbox-info" onChange={(event) => handleCheckboxChange(event, client.FirstName, client.LastName, client.Email, client.Phone)} />
+														<input type="checkbox" className="checkbox checkbox-info" onChange={(event) => handleCheckboxChange(event, company.CompanyName, company.Email)} />
 													</p>
-													{client.FirstName}
+													{company.CompanyName}
 												</div>
 
 												<div className="flex items-center justify-center p-2.5 xl:p-5">
-													<p className="text-black dark:text-white">{client.LastName}</p>
-												</div>
-
-												<div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-													<p className="text-meta-5">{client.Email}</p>
-												</div>
-
-												<div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-													<p className="text-meta-5">{client.Phone}</p>
+													<p className="text-black dark:text-white">{company.Email}</p>
 												</div>
 
 											</div>
@@ -252,7 +177,7 @@ const ModalEmailSMS = (props: any) => {
 								/>
 							</svg>
 						</label>
-						<ModalPDF modalId="modalPDF" handleDataFromChild={handleDataFromChild} />
+						{/* <ModalPDF modalId="modalPDF" handleDataFromChild={handleDataFromChild} /> */}
 						<button className="btn"
 							style={{ color: "white", backgroundColor: "#007bff", padding: "10px 20px", margin: "0.5rem" }}
 							onClick={sendEmails}
@@ -271,29 +196,6 @@ const ModalEmailSMS = (props: any) => {
 								/>
 							</svg>
 						</button>
-						<button className="btn"
-							style={{ color: "white", backgroundColor: "#007bff", padding: "10px 20px", margin: "0.5rem" }}
-							onClick={sendSMSs}
-						>
-							<svg
-								className="fill-current"
-								width="22"
-								height="22"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M21 6.5C21 5.12 19.88 4 18.5 4H5.5C4.12 4 3 5.12 3 6.5V17.5C3 18.88 4.12 20 5.5 20H16.5L21 24V6.5Z"
-									stroke="currentColor"
-									strokeWidth="2"
-									fill="none"
-								/>
-								<line x1="7" y1="9" x2="17" y2="9" stroke="currentColor" strokeWidth="1.5" />
-								<line x1="7" y1="12" x2="17" y2="12" stroke="currentColor" strokeWidth="1.5" />
-								<line x1="7" y1="15" x2="17" y2="15" stroke="currentColor" strokeWidth="1.5" />
-							</svg>
-						</button>
 					</div>
 				</div>
 			</div>
@@ -301,4 +203,4 @@ const ModalEmailSMS = (props: any) => {
 	);
 };
 
-export default ModalEmailSMS;
+export default ModalEmail;

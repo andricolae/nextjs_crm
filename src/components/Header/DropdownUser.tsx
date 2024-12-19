@@ -14,9 +14,9 @@ const DropdownUser = () => {
 
         try {
             await fetch(`/api/logout`, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
             }).then(response => response.json());
             window.location.href="/";

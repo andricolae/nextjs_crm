@@ -1,6 +1,6 @@
-'use client';
-import React, { useState } from 'react';
-import InfoPopup from '../common/InfoPopup';
+"use client";
+import React, { useState } from "react";
+import InfoPopup from "@/components/common/InfoPopup";
 
 export const addService = async (name: string | undefined, description: string | undefined, price: string | undefined, modalId?: string) => {
 	let modalInput, addSuccessfuly = "0";
@@ -9,9 +9,9 @@ export const addService = async (name: string | undefined, description: string |
 	}
 	try {
 		const response = await fetch(`/api/insertService`, {
-			method: 'POST',
+			method: "POST",
 			headers: {
-				'Content-Type': 'application/json',
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
 				Name: name,
@@ -53,9 +53,9 @@ const ModalServices = (props: any) => {
 		let Id = props.Id;
 		try {
 			const response = await fetch(`/api/updateService/${Id}`, {
-				method: 'PUT',
+				method: "PUT",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
 					Name: name,
@@ -83,9 +83,9 @@ const ModalServices = (props: any) => {
 		const modalInput = document.getElementById(props.modalId) as HTMLInputElement;
 		try {
 			const response = await fetch(`/api/deleteService/${props.Id}`, {
-				method: 'DELETE',
+				method: "DELETE",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				}
 			});
 
@@ -113,7 +113,7 @@ const ModalServices = (props: any) => {
 						<label htmlFor={props.modalId} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">X</label>
 						<input placeholder="Name" value={name} className="flex items-center gap-3 p-2.5 xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setName(e.target.value)} />
 						<input placeholder="Description" value={description} className="flex items-center justify-center p-2.5 xl:p-5 text-black focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setDescription(e.target.value)} />
-						<input placeholder="Price" value={price} className="flex items-center justify-center p-2.5 xl:p-5 text-meta-3 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setPrice(e.target.value)} />
+						<input type="number" placeholder="Price" value={price} className="flex items-center justify-center p-2.5 xl:p-5 text-meta-3 focus:outline-none focus:ring-0 focus:border-transparent" onChange={(e) => setPrice(e.target.value)} />
 					</div>
 
 					<div className="modal-action">
@@ -128,6 +128,6 @@ const ModalServices = (props: any) => {
 
 export default ModalServices;
 function GenerateTSVFile(data: (string | string[] | { name: string; age: number; city: string; })[]) {
-	throw new Error('Function not implemented.');
+	throw new Error("Function not implemented.");
 }
 

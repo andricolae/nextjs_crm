@@ -1,4 +1,4 @@
-import MailSender from './MailSender';
+import MailSender from "@/components/common/MailSender";
 
 class SendEmailTask {
 	private mailSender: MailSender;
@@ -18,9 +18,9 @@ class SendEmailTask {
 	public async execute(): Promise<void> {
 		try {
 			await this.mailSender.sendEmail(this.to, this.subject, this.body, this.pdf);
-			console.log('Email sent successfully');
+			console.log("Email sent successfully");
 		} catch (error) {
-			console.error('Error sending email:', error);
+			console.error("Error sending email:", error);
 		}
 	}
 }

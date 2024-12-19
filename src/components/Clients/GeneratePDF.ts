@@ -1,5 +1,5 @@
 import { jsPDF } from "jspdf";
-import 'jspdf-autotable';
+import "jspdf-autotable";
 
 function GeneratePDF(): Blob {
 	const doc = new jsPDF();
@@ -33,14 +33,14 @@ function GeneratePDF(): Blob {
 	// Add table with autoTable
 	(doc as any).autoTable({
 		startY: 95,
-		head: [['Service', 'CANT.', 'PRET UNITAR', 'TOTAL', 'TVA']],
+		head: [["Service", "CANT.", "PRET UNITAR", "TOTAL", "TVA"]],
 		body: [
-			['produsul meu', '5', '260,00', '1 300,00', '247,00 (19.00%)'],
-			['produsul meu (Reducere 10%)', '5', '-26,00', '-130,00', '-24,70 (19.00%)'],
-			['serviciul meu', '8', '319,00', '2 552,00', '484,88 (19.00%)'],
+			["produsul meu", "5", "260,00", "1 300,00", "247,00 (19.00%)"],
+			["produsul meu (Reducere 10%)", "5", "-26,00", "-130,00", "-24,70 (19.00%)"],
+			["serviciul meu", "8", "319,00", "2 552,00", "484,88 (19.00%)"],
 		],
 		styles: { fontSize: 10 },
-		theme: 'grid',
+		theme: "grid",
 	});
 
 	// Add totals

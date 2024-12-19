@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 class MailSender {
 	private user: string;
@@ -10,7 +10,7 @@ class MailSender {
 		this.password = password;
 
 		this.transporter = nodemailer.createTransport({
-			host: 'mail.brandtransilvania.ro',
+			host: "mail.brandtransilvania.ro",
 			port: 465,
 			secure: true, // use TLS
 			auth: {
@@ -18,7 +18,7 @@ class MailSender {
 				pass: this.password,
 			},
 			tls: {
-				ciphers: 'SSLv3',
+				ciphers: "SSLv3",
 			},
 		});
 	}
@@ -29,7 +29,7 @@ class MailSender {
 		if (pdf && pdf instanceof Blob) {
 			const pdfBuffer = Buffer.from(await pdf.arrayBuffer());
 			mailOptions = {
-				from: '"CRM" <office@brandtransilvania.ro>',
+				from: "'CRM' <office@brandtransilvania.ro>",
 				to: to,
 				subject: subject,
 				text: body,
@@ -42,23 +42,23 @@ class MailSender {
 				]
 			};
 
-			console.log('Sending email with attachment:', mailOptions);
+			console.log("Sending email with attachment:", mailOptions);
 		} else {
 			mailOptions = {
-				from: '"CRM" <office@brandtransilvania.ro>',
+				from: "'CRM' <office@brandtransilvania.ro>",
 				to: to,
 				subject: subject,
 				text: body,
 			};
 
-			console.log('Sending email without attachment:', mailOptions);
+			console.log("Sending email without attachment:", mailOptions);
 		}
 
 		try {
 			await this.transporter.sendMail(mailOptions);
-			console.log('Email sent successfully');
+			console.log("Email sent successfully");
 		} catch (error) {
-			console.error('Error sending email:', error);
+			console.error("Error sending email:", error);
 			throw error;
 		}
 	}
