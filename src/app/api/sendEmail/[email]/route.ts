@@ -1,18 +1,18 @@
-import { NextResponse } from 'next/server';
-import SendEmailTask from '@/components/common/SendEmailTask';
-import GeneratePDF from '@/components/Clients/GeneratePDF';
+import { NextResponse } from "next/server";
+import SendEmailTask from "@/components/common/SendEmailTask";
+import GeneratePDF from "@/components/Clients/GeneratePDF";
 
 export async function PUT(request: Request, { params }: { params: { email: string } }) {
 	try {
 		const { email } = params;
 		const { Subject, EmailText, OfferServiceArray, DiscountPercent, OfferDescription } = await request.json();
 
-		if (!email || typeof email !== 'string') {
-			return NextResponse.json({ message: 'Invalid email' }, { status: 400 });
+		if (!email || typeof email !== "string") {
+			return NextResponse.json({ message: "Invalid email" }, { status: 400 });
 		}
 
 		if (!Subject || !EmailText) {
-			return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
+			return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
 		}
 
 		let pdf;
@@ -30,9 +30,9 @@ export async function PUT(request: Request, { params }: { params: { email: strin
 		);
 		await emailTask.execute();
 
-		return NextResponse.json({ message: 'Client updated successfully' }, { status: 200 });
+		return NextResponse.json({ message: "Client updated successfully" }, { status: 200 });
 	} catch (error) {
 		console.error(error);
-		return NextResponse.json({ message: 'Error updating client' }, { status: 500 });
+		return NextResponse.json({ message: "Error updating client" }, { status: 500 });
 	}
 }

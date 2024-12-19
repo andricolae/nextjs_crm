@@ -1,31 +1,31 @@
-import { NextResponse } from 'next/server';
-import pool from '../../../../lib/db';
+import { NextResponse } from "next/server";
+import pool from "@/lib/db";
 
 export async function PUT(req: Request, { params }: { params: { EmployeeId: string } }) {
-    const { EmployeeId } = params;
-    const { Password } = await req.json();
+	const { EmployeeId } = params;
+	const { Password } = await req.json();
 
-    if (typeof EmployeeId !== 'string') {
-        return NextResponse.json({ message: 'Invalid ID' }, { status: 400 });
-    }
+	if (typeof EmployeeId !== "string") {
+		return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+	}
 
-    if (!Password) {
-        return NextResponse.json({ message: 'Missing required information' }, { status: 400 });
-    }
+	if (!Password) {
+		return NextResponse.json({ message: "Missing required information" }, { status: 400 });
+	}
 
-    try {
-        const result: any = await pool.query(
-            'UPDATE Employee SET Password = ? WHERE EmployeeId = ?',
-            [Password, EmployeeId]
-        );
+	try {
+		const result: any = await pool.query(
+			"UPDATE Employee SET Password = ? WHERE EmployeeId = ?",
+			[Password, EmployeeId]
+		);
 
-        if (result[0].length === 0) {
-            return NextResponse.json({ message: 'User not found' }, { status: 404 });
-        }
+		if (result[0].length === 0) {
+			return NextResponse.json({ message: "User not found" }, { status: 404 });
+		}
 
-        return NextResponse.json({ message: 'Password updated successfully' }, { status: 200 });
-    } catch (error) {
-        console.error('Error updating password:', error);
-        return NextResponse.json({ message: 'Error updating password' }, { status: 500 });
-    }
+		return NextResponse.json({ message: "Password updated successfully" }, { status: 200 });
+	} catch (error) {
+		console.error("Error updating password:", error);
+		return NextResponse.json({ message: "Error updating password" }, { status: 500 });
+	}
 }

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import Loader from '../common/Loader';
-import GeneratePDF from './GeneratePDF';
-import InfoPopup from '../common/InfoPopup';
+import React, { useEffect, useState } from "react";
+import Loader from "@/components/common/Loader";
+import GeneratePDF from "@/components/Clients/GeneratePDF";
+import InfoPopup from "@/components/common/InfoPopup";
 
 type service = {
 	Id: any,
@@ -18,8 +18,8 @@ const ModalPDF = (props: any) => {
 
 	const getServices = async () => {
 		try {
-			await fetch('api/readService', {
-				method: 'GET',
+			await fetch("api/readService", {
+				method: "GET",
 			})
 				.then(response => response.json())
 				.then(data => {
@@ -134,7 +134,7 @@ const ModalPDF = (props: any) => {
 							<button
 								// htmlFor={props.modalId} 
 								className="btn"
-								style={{ color: 'white', backgroundColor: '#007bff', padding: '10px 20px', margin: '0.5rem' }}
+								style={{ color: "white", backgroundColor: "#007bff", padding: "10px 20px", margin: "0.5rem" }}
 								onClick={createPDF}>
 								Attach PDF
 							</button>

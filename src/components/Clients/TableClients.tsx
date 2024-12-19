@@ -1,24 +1,30 @@
-'use client';
-import React, { useEffect, useState, useRef } from "react";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import { createHash } from "crypto";
 import ModalClients from "@/components/Clients/ModalClients";
-import Loader from "../common/Loader";
-import useStore from "../common/StoreForSearch";
-import "./style.css";
-import ModalEmailSMS from "./ModalEmailSMS";
-import { createHash } from 'crypto';
+import Loader from "@/components/common/Loader";
+import useStore from "@/components/common/StoreForSearch";
+import InfoPopup from "@/components/common/InfoPopup";
+import HandleFileImport from "@/components/common/HandleFileImport";
+import ModalEmailSMS from "@/components/Clients/ModalEmailSMS";
+import "@/components/Clients/style.css";
 
 type client = {
-	ClientId: any,
-	FirstName: any,
-	LastName: any,
-	CI: any,
-	CNP: any,
-	CompanyId: any,
-	CompanyRole: any,
-	Address: any,
-	Email: any,
-	Phone: any,
-	Interests: any,
+	ClientId: string,
+	FirstName: string,
+	LastName: string,
+	CI: string,
+	CNP: string,
+	CompanyId: string,
+	CompanyRole: string,
+	Address: string,
+	Email: string,
+	Phone: string,
+	Interests: string,
+	BirthDate: string,
+	Details: string,
+	StatusEmail: string,
+	StatusSMS: string
 }
 
 const TableClients = () => {
@@ -33,11 +39,16 @@ const TableClients = () => {
 	const getClients = async () => {
 		try {
 			await fetch(`/api/readClient`, {
-				method: 'GET',
-			}).then(response => response.json())
+				method: "GET",
+			}).then(response => {
+				if (!response.ok) {
+					InfoPopup("Failed to load clients");
+				}
+				return response.json()
+			})
 				.then(data => {
 					setClients(data);
-					setFilteredClients(data);
+					// setFilteredClients(data);
 				})
 		} catch (error) {
 			console.log(error);
@@ -52,37 +63,32 @@ const TableClients = () => {
 
 	useEffect(() => {
 		const filtered = clients.filter((client) =>
-			client.FirstName?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-			client.LastName?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-			client.CI?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-			client.CNP?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-			client.CompanyId?.toString().includes(searchTerm?.toLowerCase()) ||
-			client.CompanyRole?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-			client.Address?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-			client.Email?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-			client.Phone?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-			client.Interests?.toLowerCase().includes(searchTerm?.toLowerCase())
+			client.FirstName?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.LastName?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.CI?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.CNP?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.CompanyId?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.CompanyRole?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.Address?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.Email?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.Phone?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.Interests?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.BirthDate?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.Details?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.StatusEmail?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			client.StatusSMS?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "")
 		);
 
 		setFilteredClients(filtered);
 	}, [searchTerm, clients]);
 
-	const fileInputRef = useRef<HTMLInputElement | null>(null);
-
 	const handleButtonClick = () => {
-		fileInputRef.current?.click();
-	};
-
-	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (event.target.files && event.target.files.length > 0) {
-			const file = event.target.files[0];
-			console.log("Selected file:", file);
+		const fileInput = document.getElementById("clientsImport") as HTMLInputElement;
+		if (fileInput) {
+			fileInput.value = "";
+			fileInput.click();
 		}
 	};
-
-	// const deleteClient = (clientId: string) => {
-	//     setFilteredClients(filteredClients.filter(item => item.ClientId !== clientId));
-	// }
 
 	return (
 		<div className="rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -93,7 +99,7 @@ const TableClients = () => {
 
 				<div className="w-full flex flex-col items-end">
 					<h6>
-						<label htmlFor="modalEmailSMS" className="btn" style={{ color: 'white', backgroundColor: '#007bff', margin: '3px' }}>
+						<label htmlFor="modalEmailSMS" className="btn" style={{ color: "white", backgroundColor: "#007bff", margin: "3px" }}>
 							<svg
 								className="fill-current"
 								width="22"
@@ -109,32 +115,34 @@ const TableClients = () => {
 							</svg>
 						</label>
 						<ModalEmailSMS modalId="modalEmailSMS" filteredClients={filteredClients} />
-						{userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
-							<button className="btn" style={{ color: 'white', backgroundColor: '#007bff', margin: '3px' }} onClick={handleButtonClick}>
-								<svg
-									className="fill-current"
-									width="22"
-									height="22"
-									viewBox="0 0 24 24"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M12 3V15M12 3L8 7M12 3L16 7M4 20H20M4 20V16M20 20V16"
-										stroke="currentColor"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-									/>
-								</svg>
+						{userPermissions === createHash("sha512").update("admin", "utf8").digest("hex") ? (
+							<>
+								<button className="btn" style={{ color: "white", backgroundColor: "#007bff", margin: "3px" }} onClick={handleButtonClick}>
+									<svg
+										className="fill-current"
+										width="22"
+										height="22"
+										viewBox="0 0 24 24"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M12 3V15M12 3L8 7M12 3L16 7M4 20H20M4 20V16M20 20V16"
+											stroke="currentColor"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+										/>
+									</svg>
+								</button>
 								<input
+									id="clientsImport"
 									type="file"
-									ref={fileInputRef}
-									style={{ display: 'none' }}
+									style={{ display: "none" }}
 									accept=".tsv"
-									onChange={handleFileChange}
+									onInput={(e) => HandleFileImport(e, "cl")}
 								/>
-							</button>
+							</>
 						) : (
 							<></>
 						)}
@@ -143,7 +151,7 @@ const TableClients = () => {
 			</div>
 
 			<div className="flex flex-col">
-				<div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-10">
+				<div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
 					<div className="p-2.5 xl:p-5">
 						<h5 className="text-sm font-medium uppercase xsm:text-base">
 							First Name
@@ -152,16 +160,6 @@ const TableClients = () => {
 					<div className="p-2.5 text-center xl:p-5">
 						<h5 className="text-sm font-medium uppercase xsm:text-base">
 							Last Name
-						</h5>
-					</div>
-					<div className="p-2.5 text-center xl:p-5">
-						<h5 className="text-sm font-medium uppercase xsm:text-base">
-							CI
-						</h5>
-					</div>
-					<div className="hidden p-2.5 text-center sm:block xl:p-5">
-						<h5 className="text-sm font-medium uppercase xsm:text-base">
-							CNP
 						</h5>
 					</div>
 					<div className="hidden p-2.5 text-center sm:block xl:p-5">
@@ -176,21 +174,6 @@ const TableClients = () => {
 					</div>
 					<div className="hidden p-2.5 text-center sm:block xl:p-5">
 						<h5 className="text-sm font-medium uppercase xsm:text-base">
-							Address
-						</h5>
-					</div>
-					<div className="hidden p-2.5 text-center sm:block xl:p-5">
-						<h5 className="text-sm font-medium uppercase xsm:text-base">
-							Email
-						</h5>
-					</div>
-					<div className="hidden p-2.5 text-center sm:block xl:p-5">
-						<h5 className="text-sm font-medium uppercase xsm:text-base">
-							Phone
-						</h5>
-					</div>
-					<div className="hidden p-2.5 text-center sm:block xl:p-5">
-						<h5 className="text-sm font-medium uppercase xsm:text-base">
 							Interests
 						</h5>
 					</div>
@@ -200,7 +183,7 @@ const TableClients = () => {
 					<div>
 						{filteredClients.map((client, key) => (
 							<div key={key}>
-								<label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-10 ${key === clients.length - 1
+								<label htmlFor={`my_modal_${key}`} className={`grid grid-cols-3 sm:grid-cols-5 ${key === clients.length - 1
 									? ""
 									: "border-b border-stroke dark:border-strokedark"
 									}`}>
@@ -214,41 +197,23 @@ const TableClients = () => {
 										<p className="text-black dark:text-white">{client.LastName}</p>
 									</div>
 
-									<div className="flex items-center justify-center p-2.5 xl:p-5">
-										<p className="text-meta-3">{client.CI}</p>
-									</div>
-
-									<div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-										<p className="text-black dark:text-white">{client.CNP}</p>
-									</div>
-
 									<div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
 										<p className="text-meta-5">
 											{companiesArray.find(comp => comp.CompanyId === client.CompanyId)?.CompanyName || "Unknown"}
 										</p>
 									</div>
+
 									<div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
 										<p className="text-meta-5">{client.CompanyRole}</p>
 									</div>
-									<div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-										<p className="text-meta-5">{client.Address}</p>
-									</div>
-									<div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-										<p className="text-meta-5">{client.Email}</p>
-									</div>
-									<div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-										<p className="text-meta-5">{client.Phone}</p>
-									</div>
+
 									<div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
 										<p className="text-meta-5">{client.Interests}</p>
 									</div>
 								</label>
-								{userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
-									<ModalClients
-										// deleteClient={deleteClient} 
-										modalCheckboxRef={modalCheckboxRef}
-										clientId={client.ClientId} modalId={`my_modal_${key}`} firstName={client.FirstName} lastName={client.LastName} CI={client.CI} CNP={client.CNP} companyId={client.CompanyId}
-										companyRole={client.CompanyRole} address={client.Address} email={client.Email} phone={client.Phone} interests={client.Interests} secondButton={false} />
+								{userPermissions === createHash("sha512").update("admin", "utf8").digest("hex") ? (
+									<ModalClients modalCheckboxRef={modalCheckboxRef} modalId={`my_modal_${key}`}
+										client={client} secondButton={false} />
 								) : (
 									<></>
 								)}

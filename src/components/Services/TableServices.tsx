@@ -1,17 +1,17 @@
-'use client';
+"use client";
 import React, { useEffect, useRef, useState } from "react";
-import ModalServices, { addService } from "@/components/Services/ModalServices";
-import Loader from "../common/Loader";
-import useStore from "../common/StoreForSearch";
-import { createHash } from 'crypto';
-import InfoPopup from "../common/InfoPopup";
-import GenerateTSV from "../common/GenerateTSV";
+import { createHash } from "crypto";
+import ModalServices from "@/components/Services/ModalServices";
+import Loader from "@/components/common/Loader";
+import useStore from "@/components/common/StoreForSearch";
+import InfoPopup from "@/components/common/InfoPopup";
+import HandleFileImport from "@/components/common/HandleFileImport";
 
 type service = {
-	Id: any,
-	Name: any,
-	Description: any,
-	Price: any,
+	Id: string,
+	Name: string,
+	Description: string,
+	Price: string,
 }
 
 const TableServices = () => {
@@ -23,13 +23,18 @@ const TableServices = () => {
 
 	const getServices = async () => {
 		try {
-			await fetch('api/readService', {
-				method: 'GET',
+			await fetch("api/readService", {
+				method: "GET",
 			})
-				.then(response => response.json())
+				.then(response => {
+					if (!response.ok) {
+						InfoPopup("Failed to load services");
+					}
+					return response.json();
+				})
 				.then(data => {
 					setServices(data);
-				})
+				});
 		} catch (error) {
 			console.log(error);
 		}
@@ -42,61 +47,19 @@ const TableServices = () => {
 
 	useEffect(() => {
 		const filtered = services.filter((service) =>
-			service.Name?.toLowerCase().includes(searchTerm?.toLocaleLowerCase()) ||
-			service.Description?.toString().includes(searchTerm?.toLocaleLowerCase()) ||
-			service.Price?.toString().includes(searchTerm?.toLocaleLowerCase())
+			service.Name?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			service.Description?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "") ||
+			service.Price?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase() ?? "")
 		);
 
 		setFilteredService(filtered);
 	}, [services, searchTerm]);
 
-	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const handleButtonClick = () => {
-		fileInputRef.current?.click();
-	};
-
-	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (event.target.files && event.target.files.length > 0) {
-			const file = event.target.files[0];
-
-			const reader = new FileReader();
-
-			// Read the file as text
-			reader.onload = async (e) => {
-				let tsvLinesArray: any[] = [];
-				const text = e.target?.result as string;
-
-				// Split the file content by lines
-				const lines = text.split('\n');
-
-				// Iterate through lines
-				for (let index = 0; index < lines.length; index++) {
-					const line = lines[index];
-					const [name, description, price] = line.split('\t'); // Split each line by tabs
-					let addSuccessfuly: any = await addService(name, description, price);
-					if (addSuccessfuly === "0") {
-						tsvLinesArray.push(line);
-					}
-					console.log(`Row ${index + 1}:`, name + " " + description + " " + price);
-				}
-
-				console.log(tsvLinesArray.length);
-				if (tsvLinesArray.length !== 0) {
-					console.log(tsvLinesArray);
-					GenerateTSV(tsvLinesArray);
-					InfoPopup("Some services failed to be imported");
-				} else {
-					InfoPopup("Services imported successfuly");
-				}
-			};
-
-			// Handle errors
-			reader.onerror = (e) => {
-				console.error("Failed to read file:", e);
-				InfoPopup("Failed to read imported file");
-			};
-
-			reader.readAsText(file);
+		const fileInput = document.getElementById("servicesImport") as HTMLInputElement;
+		if (fileInput) {
+			fileInput.value = "";
+			fileInput.click();
 		}
 	};
 
@@ -106,9 +69,9 @@ const TableServices = () => {
 				<h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
 					Services
 				</h4>
-				{userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
+				{userPermissions === createHash("sha512").update("admin", "utf8").digest("hex") ? (
 					<div className="w-full flex flex-col items-end">
-						<button className="btn" style={{ color: 'white', backgroundColor: '#007bff', margin: '3px' }} onClick={handleButtonClick}>
+						<button className="btn" style={{ color: "white", backgroundColor: "#007bff", margin: "3px" }} onClick={handleButtonClick}>
 							<svg
 								className="fill-current"
 								width="22"
@@ -125,14 +88,14 @@ const TableServices = () => {
 									strokeLinejoin="round"
 								/>
 							</svg>
-							<input
-								type="file"
-								ref={fileInputRef}
-								style={{ display: 'none' }}
-								accept=".tsv"
-								onChange={handleFileChange}
-							/>
 						</button>
+						<input
+							id="servicesImport"
+							type="file"
+							style={{ display: "none" }}
+							accept=".tsv"
+							onChange={(e) => HandleFileImport(e, "se")}
+						/>
 					</div>
 				) : (
 					<></>
@@ -181,7 +144,7 @@ const TableServices = () => {
 									</div>
 
 								</label>
-								{userPermissions === createHash('sha512').update("admin", 'utf8').digest('hex') ? (
+								{userPermissions === createHash("sha512").update("admin", "utf8").digest("hex") ? (
 									<ModalServices Id={service.Id} modalId={`my_modal_${key}`} name={service.Name} description={service.Description} price={service.Price} secondButton={false} />
 								) : (
 									<></>

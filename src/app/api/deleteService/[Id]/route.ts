@@ -1,23 +1,23 @@
-import { NextResponse } from 'next/server';
-import pool from '../../../../lib/db';
+import { NextResponse } from "next/server";
+import pool from "@/lib/db";
 
 export async function DELETE(request: Request, { params }: { params: { Id: string } }) {
-    try {
-        const { Id } = params;
+	try {
+		const { Id } = params;
 
-        if (!Id) {
-            return NextResponse.json({ message: 'Service ID is required' }, { status: 400 });
-        }
+		if (!Id) {
+			return NextResponse.json({ message: "Service ID is required" }, { status: 400 });
+		}
 
-        const result: any = await pool.query('DELETE FROM Service WHERE Id = ?', [Id]);
+		const result: any = await pool.query("DELETE FROM Service WHERE Id = ?", [Id]);
 
-        if (result[0].length === 0) {
-            return NextResponse.json({ message: 'Service not found' }, { status: 404 });
-        }
+		if (result[0].length === 0) {
+			return NextResponse.json({ message: "Service not found" }, { status: 404 });
+		}
 
-        return NextResponse.json({ message: 'Service deleted successfully' }, { status: 200 });
-    } catch (error) {
-        console.error('Error deleting service:', error);
-        return NextResponse.json({ message: 'Error deleting service' }, { status: 500 });
-    }
+		return NextResponse.json({ message: "Service deleted successfully" }, { status: 200 });
+	} catch (error) {
+		console.error("Error deleting service:", error);
+		return NextResponse.json({ message: "Error deleting service" }, { status: 500 });
+	}
 }
